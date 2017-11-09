@@ -32,10 +32,14 @@ public class Main {
 
 	}
 
-
 	private static List<WifiNetworkImport> convertCsvToWifiNetworkImport(File file){
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
+		List<WifiNetworkExport> wifiNetworkExportList = new ArrayList<>();
+		
+		
 		BufferedReader br = null;
+		Date temp=null;
+		
 		try {
 			br = new BufferedReader(new FileReader(file));
 			String line;
@@ -46,6 +50,8 @@ public class Main {
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
 				WifiNetworkImport wifiNetworkImport = new WifiNetworkImport();
+				WifiNetworkExport WifiNetworkExport = new WifiNetworkExport();
+				
 				String[] entries = line.split(",");
 				wifiNetworkImport.setMAC(entries[0]);
 				wifiNetworkImport.setSSID(entries[1]);
@@ -57,7 +63,7 @@ public class Main {
 				wifiNetworkImport.setCurrentLongitude(Double.parseDouble(entries[7]));
 				wifiNetworkImport.setAltitudeMeters(Integer.parseInt(entries[8]));
 				wifiNetworkImport.setAccuracyMeters(Integer.parseInt(entries[9]));
-				wifiNetworkImport.setType(entries[10]);
+				wifiNetworkImport.setType(entries[10]);					
 				
 				if (wifiNetworkImport != null){
 					wifiNetworkImportList.add(wifiNetworkImport);
@@ -77,8 +83,43 @@ public class Main {
 		
 		return wifiNetworkImportList;
 	}
-
-
+	 
+	
+	
+	
+	
+	private static List<DataToExport> SortDatesBySignal(List<WifiNetworkImport> a){
+		List<DataToExport> DataToExportList = new ArrayList<>();
+		DataToExport DataToExport = new DataToExport();
+		
+		Date temp = null;
+		
+		for( WifiNetworkImport i  : a ){
+			DataToExport.setAlt(i.getAltitudeMeters());
+			DataToExport.setLat(i.getCurrentLatitude());
+			DataToExport.setLon(i.getCurrentLongitude());
+			DataToExport.setId(i.getID);
+			
+			List<WifiNetworkExport> ListWIFI = new ArrayList<>();
+			while(i.getFirstSeen()==temp){
+				WifiNetworkExport toran = new WifiNetworkExport();
+				toran.setFreuncy(i.getChannel());
+				toran.setMAC(i.getMAC());
+				toran.setSignal(i.getRSSI());
+				toran.setSSID(i.getSSID());
+				
+				List<WifiNetworkExport> ListWIFI;
+			}
+			DataToExport.setWifiNetworks(ListWIFI);
+		}
+	}
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	private static Date getDateFromString(String stringDate) {
 		Date date = null;
 		try {
