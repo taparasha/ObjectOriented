@@ -2,10 +2,8 @@ package matala0;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,79 +22,24 @@ public class Main {
 	public static void main(String[] args) {
 
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
-
+		
 		List<File> csvFiles = getFilesList();
-
+		
 		for (File file : csvFiles) {
 			List<WifiNetworkImport> convertCsvToWifiNetworkImport = convertCsvToWifiNetworkImport(file);
 			wifiNetworkImportList.addAll(convertCsvToWifiNetworkImport);
 		}
 
-		List<DataToExport> dataToExportList = buildDataToExportList(wifiNetworkImportList);
-		
-		
-		for (DataToExport dataToExport : dataToExportList) {
-			FilterTop10(dataToExport.getWifiNetworks());
-		}
-		
-		MakeCSV(dataToExportList);
-		
-		}
-		
-		
-		// TODO: filter TOP 10 wifi for each dataToExport obj
-		// TODO: export to csv + kml
-
-
-
-	private static List<DataToExport> buildDataToExportList(List<WifiNetworkImport> wifiNetworkImportList) {
-		List<DataToExport> dataToExportList = new ArrayList<>();
-		int i = 1;
-		for (WifiNetworkImport wifiNetworkImport : wifiNetworkImportList) {
-			WifiNetworkExport wifiNetworkExport = buildWifinetworkToExport(wifiNetworkImport);
-			boolean flag = true;
-			for (DataToExport dataToExport : dataToExportList) {
-				if (dataToExport.getTime().equals(wifiNetworkImport.getFirstSeen())){
-					dataToExport.getWifiNetworks().add(wifiNetworkExport);
-					flag = false;
-					break;
-				}
-			}
-			if (flag){
-				DataToExport dataToExport = buildDataToExport(wifiNetworkImport, wifiNetworkExport,i++);
-				dataToExportList.add(dataToExport);
-			}
-		}
-		return dataToExportList;
 	}
-
-
-	private static DataToExport buildDataToExport(WifiNetworkImport wifiNetworkImport,
-			WifiNetworkExport wifiNetworkExport, int index) {
-		DataToExport dataToExport = new DataToExport();
-		dataToExport.setId(index);
-		dataToExport.setAlt(wifiNetworkImport.getAltitudeMeters());
-		dataToExport.setLat(wifiNetworkImport.getCurrentLatitude());
-		dataToExport.setLon(wifiNetworkImport.getCurrentLongitude());
-		dataToExport.setTime(wifiNetworkImport.getFirstSeen());
-		dataToExport.getWifiNetworks().add(wifiNetworkExport);
-		return dataToExport;
-	}
-
-
-	private static WifiNetworkExport buildWifinetworkToExport(WifiNetworkImport wifiNetworkImport) {
-		WifiNetworkExport wifiNetworkExport = new WifiNetworkExport();
-		wifiNetworkExport.setSSID(wifiNetworkImport.getSSID());
-		wifiNetworkExport.setSignal(wifiNetworkImport.getRSSI());
-		wifiNetworkExport.setMAC(wifiNetworkImport.getMAC());
-		wifiNetworkExport.setFreuncy(wifiNetworkImport.getAccuracyMeters());
-		return wifiNetworkExport;
-	}
-
 
 	private static List<WifiNetworkImport> convertCsvToWifiNetworkImport(File file){
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
+		List<WifiNetworkExport> wifiNetworkExportList = new ArrayList<>();
+		
+		
 		BufferedReader br = null;
+		Date temp=null;
+		
 		try {
 			br = new BufferedReader(new FileReader(file));
 			String line;
@@ -107,6 +50,8 @@ public class Main {
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
 				WifiNetworkImport wifiNetworkImport = new WifiNetworkImport();
+				WifiNetworkExport WifiNetworkExport = new WifiNetworkExport();
+				
 				String[] entries = line.split(",");
 				wifiNetworkImport.setMAC(entries[0]);
 				wifiNetworkImport.setSSID(entries[1]);
@@ -118,8 +63,8 @@ public class Main {
 				wifiNetworkImport.setCurrentLongitude(Double.parseDouble(entries[7]));
 				wifiNetworkImport.setAltitudeMeters(Integer.parseInt(entries[8]));
 				wifiNetworkImport.setAccuracyMeters(Integer.parseInt(entries[9]));
-				wifiNetworkImport.setType(entries[10]);
-
+				wifiNetworkImport.setType(entries[10]);					
+				
 				if (wifiNetworkImport != null){
 					wifiNetworkImportList.add(wifiNetworkImport);
 				}
@@ -135,11 +80,46 @@ public class Main {
 				}
 			}
 		}
-
+		
 		return wifiNetworkImportList;
 	}
-
-
+	 
+	
+	
+	
+	
+	private static List<DataToExport> SortDatesBySignal(List<WifiNetworkImport> a){
+		List<DataToExport> DataToExportList = new ArrayList<>();
+		DataToExport DataToExport = new DataToExport();
+		
+		Date temp = null;
+		
+		for( WifiNetworkImport i  : a ){
+			DataToExport.setAlt(i.getAltitudeMeters());
+			DataToExport.setLat(i.getCurrentLatitude());
+			DataToExport.setLon(i.getCurrentLongitude());
+			DataToExport.setId(i.getID);
+			
+			List<WifiNetworkExport> ListWIFI = new ArrayList<>();
+			while(i.getFirstSeen()==temp){
+				WifiNetworkExport toran = new WifiNetworkExport();
+				toran.setFreuncy(i.getChannel());
+				toran.setMAC(i.getMAC());
+				toran.setSignal(i.getRSSI());
+				toran.setSSID(i.getSSID());
+				
+				List<WifiNetworkExport> ListWIFI;
+			}
+			DataToExport.setWifiNetworks(ListWIFI);
+		}
+	}
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	private static Date getDateFromString(String stringDate) {
 		Date date = null;
 		try {
@@ -178,28 +158,5 @@ public class Main {
 		}
 		return csvFiles;
 	}
-	
-	
-	/*private static List<Integer>FilterTop10(List<Integer> a){
-		List<Integer> answer = new ArrayList<>();
-		answer.add(132);
-		answer.add(12);
-		answer.add(110);
-		return answer;
-	}*/
-	
-	
-	private static void MakeCSV(List<DataToExport> DataToExportList)throws FileNotFoundException{
-	    
-	        PrintWriter pw = new PrintWriter(new File("DataToExportList.csv"));
-	        StringBuilder sb = new StringBuilder();
-	        sb.append("id");
-	        sb.append(',');
-	        sb.append("Name");
-	        sb.append('\n');
 
-
-	        pw.write(sb.toString());
-	        pw.close();
-	}
 }
