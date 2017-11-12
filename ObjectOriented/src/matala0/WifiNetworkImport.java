@@ -12,7 +12,7 @@ public class WifiNetworkImport {
 	private int RSSI;
 	private double currentLatitude;
 	private double currentLongitude;
-	private int altitudeMeters;
+	private double altitudeMeters;
 	private int accuracyMeters;
 	private String type;
 
@@ -64,10 +64,10 @@ public class WifiNetworkImport {
 	public void setCurrentLongitude(double currentLongitude) {
 		this.currentLongitude = currentLongitude;
 	}
-	public int getAltitudeMeters() {
+	public double getAltitudeMeters() {
 		return altitudeMeters;
 	}
-	public void setAltitudeMeters(int altitudeMeters) {
+	public void setAltitudeMeters(double altitudeMeters) {
 		this.altitudeMeters = altitudeMeters;
 	}
 	public int getAccuracyMeters() {

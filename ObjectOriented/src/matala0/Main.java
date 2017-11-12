@@ -12,14 +12,29 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import de.micromata.opengis.kml.v_2_2_0.Coordinate;
+import de.micromata.opengis.kml.v_2_2_0.Document;
+import de.micromata.opengis.kml.v_2_2_0.Folder;
+import de.micromata.opengis.kml.v_2_2_0.Icon;
+import de.micromata.opengis.kml.v_2_2_0.IconStyle;
+import de.micromata.opengis.kml.v_2_2_0.Kml;
+import de.micromata.opengis.kml.v_2_2_0.Placemark;
+import de.micromata.opengis.kml.v_2_2_0.Style;
+import de.micromata.opengis.kml.v_2_2_0.StyleSelector;
+
 public class Main {
 
-	private static String PATH = "C:\\Users\\נגה\\Desktop\\אוניברסיטה\\שנה ב\\מונחה עצמים\\מטלה 0\\27.10\\Lenovo";
+	private static final String SEPERATOR = ",";
+	private static String BASE_PATH = "C:\\tmp";
+	private static String CSV_FILE_NAME = "\\exportData.csv";
+	private static String KML_FILE_NAME = "\\exportData.kml";
 
 	public static void main(String[] args) {
 
@@ -33,21 +48,111 @@ public class Main {
 		}
 
 		List<DataToExport> dataToExportList = buildDataToExportList(wifiNetworkImportList);
-		
-		
+
+
 		for (DataToExport dataToExport : dataToExportList) {
-			FilterTop10(dataToExport.getWifiNetworks());
+			List<WifiNetworkExport> sortWifiNetworksBySignal = sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
+			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
-		
-		MakeCSV(dataToExportList);
-		
+
+		String csvString = buildCSVData(dataToExportList);
+		saveToCsvFile(csvString);
+		//TODO: export to KML file
+		saveToKlmFile(dataToExportList);
+
+	}
+
+	//https://labs.micromata.de/projects/jak/quickstart.html
+	private static void saveToKlmFile(List<DataToExport> dataToExportList) {
+		Kml kml = new Kml();
+		Folder kmlFolder = kml.createAndSetFolder();
+		Document kmlDocument = kml.createAndSetDocument();
+		List<StyleSelector> styleSelectorList = getStyleSelectorList();
+		kmlDocument.setStyleSelector(styleSelectorList);
+		for (DataToExport dataToExport : dataToExportList) {
+			List<WifiNetworkExport> wifiNetworks = dataToExport.getWifiNetworks();
+			Coordinate cord = new Coordinate(dataToExport.getLon(),dataToExport.getLat());
+			List<Coordinate> coordinates = new ArrayList<>();
+			coordinates.add(cord);
+			String lineDescription = buildLineDescription(dataToExport);
+			for (WifiNetworkExport wifiNetwork : wifiNetworks) {
+				String description = buildDescription(wifiNetwork, lineDescription);
+				String styleURL = getStyleURL(wifiNetwork);
+				Placemark placemark = new Placemark();
+				placemark.withName(wifiNetwork.getSSID()).withDescription(description).withStyleUrl(styleURL);
+				placemark.createAndSetPoint().withCoordinates(coordinates);
+				kmlFolder.addToFeature(placemark);
+			}
 		}
-		
-		
-		// TODO: filter TOP 10 wifi for each dataToExport obj
-		// TODO: export to csv + kml
+		kmlDocument.addToFeature(kmlFolder);
+		try {
+			kml.marshal(new File(BASE_PATH + KML_FILE_NAME));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
+	private static List<StyleSelector> getStyleSelectorList() {
+		List<StyleSelector> styleSelectorList = new ArrayList<>();
+		Style redStyle = getStyleByColorAndHref("red", "http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+		Style yellowStyle = getStyleByColorAndHref("yellow", "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png");
+		Style greenStyle = getStyleByColorAndHref("green", "http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+		Style blueStyle = getStyleByColorAndHref("blue", "http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
+		Style orangeStyle = getStyleByColorAndHref("orange", "http://maps.google.com/mapfiles/ms/icons/orange-dot.png");
+		styleSelectorList.add(redStyle);
+		styleSelectorList.add(yellowStyle);
+		styleSelectorList.add(greenStyle);
+		styleSelectorList.add(blueStyle);
+		styleSelectorList.add(orangeStyle);
+		return styleSelectorList;
+	}
 
+	private static Style getStyleByColorAndHref(String color, String href) {
+		Style redStyle = new Style();
+		redStyle.setId(color);
+		IconStyle iconStyle = new IconStyle();
+		iconStyle.createAndSetIcon().withHref(href);
+		redStyle.setIconStyle(iconStyle);
+		return redStyle;
+	}
+
+	private static String getStyleURL(WifiNetworkExport wifiNetwork) {
+		String styleURL = "";
+		if(wifiNetwork.getSignal() > -67 ) styleURL = "#red";
+		else if(wifiNetwork.getSignal() > -70 ) styleURL = "#orange";
+		else if(wifiNetwork.getSignal() > -80 ) styleURL = "#blue";
+		else if(wifiNetwork.getSignal() > -90 ) styleURL = "#green";
+		else styleURL = "#yellow";
+		return styleURL;
+	}
+
+	private static String buildLineDescription(DataToExport dataToExport) {
+		StringBuilder ret = new StringBuilder();
+		ret.append("Id: " + dataToExport.getId() + "\n");
+		ret.append("Time: " + dataToExport.getTime() + "\n");
+		ret.append("Alt: " + dataToExport.getAlt() + "\n\n");
+		return ret.toString();
+	}
+
+	private static String buildDescription(WifiNetworkExport wifiNetwork, String lineDescription) {
+		StringBuilder ret = new StringBuilder();
+		ret.append(lineDescription);
+		ret.append("Freuncy: " + wifiNetwork.getFreuncy() + "\n");
+		ret.append("MAC: " + wifiNetwork.getMAC() + "\n");
+		ret.append("Signal: " + wifiNetwork.getSignal() + "\n");
+		return ret.toString();
+	}
+
+	private static void saveToCsvFile(String csvString) {
+		try(  PrintWriter out = new PrintWriter(BASE_PATH + CSV_FILE_NAME)  ){
+			out.println(csvString);
+		} catch (FileNotFoundException e) {
+			System.out.println("Failed to save CSV file");
+			e.printStackTrace();
+		}
+
+	}
 
 	private static List<DataToExport> buildDataToExportList(List<WifiNetworkImport> wifiNetworkImportList) {
 		List<DataToExport> dataToExportList = new ArrayList<>();
@@ -97,6 +202,7 @@ public class Main {
 	private static List<WifiNetworkImport> convertCsvToWifiNetworkImport(File file){
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
 		BufferedReader br = null;
+		int i = 1;
 		try {
 			br = new BufferedReader(new FileReader(file));
 			String line;
@@ -104,8 +210,9 @@ public class Main {
 			br.readLine();
 			br.readLine();
 
+
 			while ((line = br.readLine()) != null) {
-				System.out.println(line);
+				System.out.println("Line: " + i++ + ") " + line);
 				WifiNetworkImport wifiNetworkImport = new WifiNetworkImport();
 				String[] entries = line.split(",");
 				wifiNetworkImport.setMAC(entries[0]);
@@ -116,7 +223,7 @@ public class Main {
 				wifiNetworkImport.setRSSI(Integer.parseInt(entries[5]));
 				wifiNetworkImport.setCurrentLatitude(Double.parseDouble(entries[6]));
 				wifiNetworkImport.setCurrentLongitude(Double.parseDouble(entries[7]));
-				wifiNetworkImport.setAltitudeMeters(Integer.parseInt(entries[8]));
+				wifiNetworkImport.setAltitudeMeters(Double.parseDouble(entries[8]));
 				wifiNetworkImport.setAccuracyMeters(Integer.parseInt(entries[9]));
 				wifiNetworkImport.setType(entries[10]);
 
@@ -124,7 +231,8 @@ public class Main {
 					wifiNetworkImportList.add(wifiNetworkImport);
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
+			System.err.println("Failed to import file: " + file.getName() + ". On line: " + (i-1));
 			e.printStackTrace();
 		}finally {
 			if (br != null){
@@ -158,7 +266,7 @@ public class Main {
 		Stream<Path> paths = null;
 		List<File> csvFiles = new ArrayList<>();
 		try {
-			paths = Files.walk(Paths.get(PATH));
+			paths = Files.walk(Paths.get(BASE_PATH));
 		} catch (IOException e) {
 			System.err.println("Cano't find files in path");
 			e.printStackTrace();
@@ -178,28 +286,76 @@ public class Main {
 		}
 		return csvFiles;
 	}
-	
-	
-	/*private static List<Integer>FilterTop10(List<Integer> a){
-		List<Integer> answer = new ArrayList<>();
-		answer.add(132);
-		answer.add(12);
-		answer.add(110);
-		return answer;
-	}*/
-	
-	
-	private static void MakeCSV(List<DataToExport> DataToExportList)throws FileNotFoundException{
-	    
-	        PrintWriter pw = new PrintWriter(new File("DataToExportList.csv"));
-	        StringBuilder sb = new StringBuilder();
-	        sb.append("id");
-	        sb.append(',');
-	        sb.append("Name");
-	        sb.append('\n');
+
+	//https://stackoverflow.com/questions/8432581/how-to-sort-a-listobject-alphabetically-using-object-name-field
+	private static List<WifiNetworkExport> sortWifiNetworksBySignal(List<WifiNetworkExport> wifiNetworkExport){
+		if (wifiNetworkExport.size() > 0) {
+			Collections.sort(wifiNetworkExport, new Comparator<WifiNetworkExport>() {
+				@Override
+				public int compare(final WifiNetworkExport object1, final WifiNetworkExport object2) {
+					return ((Integer)((object1.getSignal()) * (-1))).compareTo(((Integer)((object2.getSignal() * (-1)))));
+				}
+			});
+		}
+		return wifiNetworkExport;
+	}
 
 
-	        pw.write(sb.toString());
-	        pw.close();
+	private static String buildCSVData(List<DataToExport> DataToExportList) {
+		StringBuilder csvStringBuilder = buildHeadRow();
+		csvStringBuilder.append("\n");
+		for (DataToExport dataToExport : DataToExportList) {
+			String rowFromDataToExport = getRowFromDataToExport(dataToExport);
+			csvStringBuilder.append(rowFromDataToExport).append("\n");
+		}
+		String csvString = csvStringBuilder.toString();
+		return csvString;
+	}
+
+
+	private static String getRowFromDataToExport(DataToExport dataToExport) {
+		StringBuilder row = new StringBuilder();
+		row.append(dataToExport.getTime()).append(SEPERATOR);
+		row.append(dataToExport.getId()).append(SEPERATOR);
+		row.append(dataToExport.getLat()).append(SEPERATOR);
+		row.append(dataToExport.getLon()).append(SEPERATOR);
+		row.append(dataToExport.getAlt()).append(SEPERATOR);
+		List<WifiNetworkExport> wifiNetworksList = dataToExport.getWifiNetworks();
+		int sizeUpToTen = getSizeUpToTen(wifiNetworksList.size());
+		row.append("" + sizeUpToTen).append(SEPERATOR);
+		for (int i = 0; i < sizeUpToTen; i++) {
+			WifiNetworkExport wifiNetworkExport = wifiNetworksList.get(i);
+			row.append(wifiNetworkExport.getSSID()).append(SEPERATOR);
+			row.append(wifiNetworkExport.getMAC()).append(SEPERATOR);
+			row.append(wifiNetworkExport.getFreuncy()).append(SEPERATOR);
+			row.append(wifiNetworkExport.getSignal()).append(SEPERATOR);
+		}
+		return row.toString();
+	}
+
+
+	private static int getSizeUpToTen(int size) {
+		if(size <= 10){
+			return size;
+		}
+		return 10;
+	}
+
+
+	private static StringBuilder buildHeadRow() {
+		StringBuilder headRow = new StringBuilder();
+		headRow.append("Time").append(SEPERATOR);
+		headRow.append("ID").append(SEPERATOR);
+		headRow.append("Lat").append(SEPERATOR);
+		headRow.append("Lon").append(SEPERATOR);
+		headRow.append("Alt").append(SEPERATOR);
+		headRow.append("#WiFi networks").append(SEPERATOR);
+		for (int i = 1; i < 11; i++) {
+			headRow.append("SSID" + i).append(SEPERATOR);
+			headRow.append("MAC" + i).append(SEPERATOR);
+			headRow.append("Frequncy" + i).append(SEPERATOR);
+			headRow.append("Signal" + i).append(SEPERATOR);
+		}
+		return headRow;
 	}
 }
