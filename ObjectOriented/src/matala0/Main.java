@@ -83,15 +83,7 @@ public class Main {
 			Coordinate cord = new Coordinate(dataToExport.getLon(),dataToExport.getLat());
 			List<Coordinate> coordinates = new ArrayList<>();
 			coordinates.add(cord);
-			
-			/*TimeStamp ts = new TimeStamp();
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-			String s = df.format(dataToExport.getTime());
-			ts.setWhen(s);
-
-			List<TimeStamp> TimeStampList = new ArrayList<>();
-			TimeStampList.add(ts);*/
-			
+						
 			String lineDescription = buildLineDescription(dataToExport);
 			for (WifiNetworkExport wifiNetwork : wifiNetworks) {
 				String description = buildDescription(wifiNetwork, lineDescription);
@@ -100,9 +92,7 @@ public class Main {
 				placemark.createAndSetTimeStamp().setWhen(dataToExport.getTime().toString());
 				placemark.withName(wifiNetwork.getSSID()).withDescription(description).withStyleUrl(styleURL);
 				placemark.createAndSetPoint().withCoordinates(coordinates);
-				
-				//placemark.createAndSetTimeStamp().withWhen(TimeStampList);
-				
+						
 				kmlFolder.addToFeature(placemark);
 			}
 		}
