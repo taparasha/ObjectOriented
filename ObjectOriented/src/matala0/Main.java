@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.Style;
 import de.micromata.opengis.kml.v_2_2_0.StyleSelector;
+import de.micromata.opengis.kml.v_2_2_0.TimeSpan;
+import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 
 public class Main {
 
@@ -57,12 +60,17 @@ public class Main {
 
 		String csvString = buildCSVData(dataToExportList);
 		saveToCsvFile(csvString);
-		//TODO: export to KML file
 		saveToKlmFile(dataToExportList);
 
 	}
 
-	//https://labs.micromata.de/projects/jak/quickstart.html
+	// building kml file
+	
+	//https://labs.micromata.de/projects/jak/quickstart.html                             jar FILES
+	//https://developers.google.com/kml/documentation/kml_tut#placemarks                 KML FORMAT
+	//http://freegeographytools.com/2007/putting-time-data-into-a-kml-file               TIMELINE
+	
+	
 	private static void saveToKlmFile(List<DataToExport> dataToExportList) {
 		Kml kml = new Kml();
 		Folder kmlFolder = kml.createAndSetFolder();
@@ -71,16 +79,30 @@ public class Main {
 		kmlDocument.setStyleSelector(styleSelectorList);
 		for (DataToExport dataToExport : dataToExportList) {
 			List<WifiNetworkExport> wifiNetworks = dataToExport.getWifiNetworks();
+			
 			Coordinate cord = new Coordinate(dataToExport.getLon(),dataToExport.getLat());
 			List<Coordinate> coordinates = new ArrayList<>();
 			coordinates.add(cord);
+			
+			/*TimeStamp ts = new TimeStamp();
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+			String s = df.format(dataToExport.getTime());
+			ts.setWhen(s);
+
+			List<TimeStamp> TimeStampList = new ArrayList<>();
+			TimeStampList.add(ts);*/
+			
 			String lineDescription = buildLineDescription(dataToExport);
 			for (WifiNetworkExport wifiNetwork : wifiNetworks) {
 				String description = buildDescription(wifiNetwork, lineDescription);
 				String styleURL = getStyleURL(wifiNetwork);
 				Placemark placemark = new Placemark();
+				placemark.createAndSetTimeStamp().setWhen(dataToExport.getTime().toString());
 				placemark.withName(wifiNetwork.getSSID()).withDescription(description).withStyleUrl(styleURL);
 				placemark.createAndSetPoint().withCoordinates(coordinates);
+				
+				//placemark.createAndSetTimeStamp().withWhen(TimeStampList);
+				
 				kmlFolder.addToFeature(placemark);
 			}
 		}
@@ -112,11 +134,12 @@ public class Main {
 		Style redStyle = new Style();
 		redStyle.setId(color);
 		IconStyle iconStyle = new IconStyle();
+		iconStyle.withScale(1.0);
 		iconStyle.createAndSetIcon().withHref(href);
 		redStyle.setIconStyle(iconStyle);
 		return redStyle;
 	}
-
+	
 	private static String getStyleURL(WifiNetworkExport wifiNetwork) {
 		String styleURL = "";
 		if(wifiNetwork.getSignal() > -67 ) styleURL = "#red";
