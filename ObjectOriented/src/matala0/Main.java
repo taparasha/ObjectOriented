@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -89,7 +90,7 @@ public class Main {
 				String description = buildDescription(wifiNetwork, lineDescription);
 				String styleURL = getStyleURL(wifiNetwork);
 				Placemark placemark = new Placemark();
-				placemark.createAndSetTimeStamp().setWhen(dataToExport.getTime().toString());
+				placemark.createAndSetTimeStamp().setWhen(convertToKMLDate(dataToExport.getTime()));
 				placemark.withName(wifiNetwork.getSSID()).withDescription(description).withStyleUrl(styleURL);
 				placemark.createAndSetPoint().withCoordinates(coordinates);
 						
@@ -264,7 +265,7 @@ public class Main {
 	private static Date getDateFromString(String stringDate) {
 		Date date = null;
 		try {
-			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			date = formatter.parse(stringDate);
 		} catch (ParseException e) {
 			System.out.println("Failed to convert string to date for string: " + stringDate);
@@ -273,6 +274,12 @@ public class Main {
 		return date;
 	}
 
+	private static String convertToKMLDate(Date date) {
+		DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		dateformat.setTimeZone(TimeZone.getTimeZone("GMT"));
+		String time = dateformat.format(date);
+		return time.replace("+0000", "Z");
+	}
 
 
 	private static List<File> getFilesList() {
