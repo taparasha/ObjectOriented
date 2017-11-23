@@ -79,7 +79,7 @@ public class DataToExportTest {
 		acList.add(ac);	
 		String actual = DataToExport.buildCSVData(acList);
 		
-		String expected = "555.5";
+		String expected = "55.5";
 				
 		assertEquals(expected, actual);
 	}
