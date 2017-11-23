@@ -44,7 +44,6 @@ public class WifiNetworkImportTest {
 		actDate = WifiNetworkImport.getDateFromString(str);
 		
 		
-		
 		assertEquals(exepDate.toString(), actDate.toString());
 	
 	}

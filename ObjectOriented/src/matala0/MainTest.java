@@ -3,6 +3,8 @@ package matala0;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.After;
@@ -44,7 +46,7 @@ public class MainTest {
 		actual.add(small);
 		actual.add(big);
 		actual.add(mid);
-		
+		 
 		Main.sortWifiNetworksBySignal(actual);
 		
 		List<WifiNetworkExport> expected = new ArrayList<>();
@@ -60,13 +62,22 @@ public class MainTest {
 	}
 
 	@Test
-	public void testSaveTokmlFile() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testBuildLineDescription() {
-		fail("Not yet implemented");
+		DataToExport act = new DataToExport();
+		Date time = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.set(2017, 9, 28, 20, 10, 00);
+		time=cal.getTime();
+		
+		act.setId(123);
+		act.setTime(time);
+		act.setAlt(10);
+		
+		String expected = "Id: 123\nTime: Sat Oct 28 20:10:00 IDT 2017\nAlt: 10.0\n\n";
+		String actual = Main.buildLineDescription(act);
+		
+		assertEquals(expected, actual);
+		
 	}
 
 	@Test
@@ -74,9 +85,5 @@ public class MainTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
-	public void testSaveToCsvFile() {
-		fail("Not yet implemented");
-	}
 
 }
