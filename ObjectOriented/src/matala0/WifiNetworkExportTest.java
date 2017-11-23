@@ -33,7 +33,7 @@ public class WifiNetworkExportTest {
        		act.setMAC("test");
 		act.setSSID("test");
 		act.setAccuracyMeters(0);
-		act.setRSSI(-3)
+		act.setRSSI(-3);
 	
 		
 		

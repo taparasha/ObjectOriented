@@ -69,7 +69,6 @@ public class Main {
 	}
 
 	
-	
 	//https://stackoverflow.com/questions/8432581/how-to-sort-a-listobject-alphabetically-using-object-name-field
 	public static List<WifiNetworkExport> sortWifiNetworksBySignal(List<WifiNetworkExport> wifiNetworkExport){
 		if (wifiNetworkExport.size() > 0) {
@@ -82,8 +81,6 @@ public class Main {
 		}
 		return wifiNetworkExport;
 	}
-	
-	
 	
 	// building kml file
 	
