@@ -1,6 +1,14 @@
 package matala0;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class WifiNetworkImport {
 	
@@ -82,4 +90,71 @@ public class WifiNetworkImport {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	
+	public static List<WifiNetworkImport> convertCsvToWifiNetworkImport(File file){
+		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
+		BufferedReader br = null;
+		int i = 1;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			String line;
+
+			br.readLine();
+			br.readLine();
+
+
+			while ((line = br.readLine()) != null) {
+				System.out.println("Line: " + i++ + ") " + line);
+				WifiNetworkImport wifiNetworkImport = new WifiNetworkImport();
+				String[] entries = line.split(",");
+				wifiNetworkImport.setMAC(entries[0]);
+				wifiNetworkImport.setSSID(entries[1]);
+				wifiNetworkImport.setAuthMode(entries[2]);
+				wifiNetworkImport.setFirstSeen(getDateFromString(entries[3]));
+				wifiNetworkImport.setChannel(Integer.parseInt(entries[4]));
+				wifiNetworkImport.setRSSI(Integer.parseInt(entries[5]));
+				wifiNetworkImport.setCurrentLatitude(Double.parseDouble(entries[6]));
+				wifiNetworkImport.setCurrentLongitude(Double.parseDouble(entries[7]));
+				wifiNetworkImport.setAltitudeMeters(Double.parseDouble(entries[8]));
+				wifiNetworkImport.setAccuracyMeters(Integer.parseInt(entries[9]));
+				wifiNetworkImport.setType(entries[10]);
+
+				if (wifiNetworkImport != null){
+					wifiNetworkImportList.add(wifiNetworkImport);
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Failed to import file: " + file.getName() + ". On line: " + (i-1));
+			e.printStackTrace();
+		}finally {
+			if (br != null){
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return wifiNetworkImportList;
+	}
+
+	
+	
+
+	public static Date getDateFromString(String stringDate) {
+		Date date = null;
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			date = formatter.parse(stringDate);
+		} catch (ParseException e) {
+			System.out.println("Failed to convert string to date for string: " + stringDate);
+			e.printStackTrace();
+		} 
+		return date;
+	}
+
+	
+	
 }

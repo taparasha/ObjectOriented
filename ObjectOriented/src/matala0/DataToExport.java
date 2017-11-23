@@ -6,6 +6,8 @@ import java.util.List;
 
 public class DataToExport {
 
+	public static final String SEPERATOR = ",";
+
 	private long id;
 	private Date time;
 	private double lat;
@@ -49,4 +51,95 @@ public class DataToExport {
 	public void setWifiNetworks(List<WifiNetworkExport> wifiNetworks) {
 		this.wifiNetworks = wifiNetworks;
 	}
+	
+	public static List<DataToExport> buildDataToExportList(List<WifiNetworkImport> wifiNetworkImportList) {
+		List<DataToExport> dataToExportList = new ArrayList<>();
+		int i = 1;
+		for (WifiNetworkImport wifiNetworkImport : wifiNetworkImportList) {
+			WifiNetworkExport wifiNetworkExport = WifiNetworkExport.buildWifinetworkToExport(wifiNetworkImport);
+			boolean flag = true;
+			for (DataToExport dataToExport : dataToExportList) {
+				if (dataToExport.getTime().equals(wifiNetworkImport.getFirstSeen())){
+					dataToExport.getWifiNetworks().add(wifiNetworkExport);
+					flag = false;
+					break;
+				}
+			}
+			if (flag){
+				DataToExport dataToExport = buildDataToExport(wifiNetworkImport, wifiNetworkExport,i++);
+				dataToExportList.add(dataToExport);
+			}
+		}
+		return dataToExportList;
+	}
+
+	public static DataToExport buildDataToExport(WifiNetworkImport wifiNetworkImport,
+			WifiNetworkExport wifiNetworkExport, int index) {
+		DataToExport dataToExport = new DataToExport();
+		dataToExport.setId(index);
+		dataToExport.setAlt(wifiNetworkImport.getAltitudeMeters());
+		dataToExport.setLat(wifiNetworkImport.getCurrentLatitude());
+		dataToExport.setLon(wifiNetworkImport.getCurrentLongitude());
+		dataToExport.setTime(wifiNetworkImport.getFirstSeen());
+		dataToExport.getWifiNetworks().add(wifiNetworkExport);
+		return dataToExport;
+	}
+	
+	public static String getRowFromDataToExport(DataToExport dataToExport) {
+		StringBuilder row = new StringBuilder();
+		row.append(dataToExport.getTime()).append(SEPERATOR);
+		row.append(dataToExport.getId()).append(SEPERATOR);
+		row.append(dataToExport.getLat()).append(SEPERATOR);
+		row.append(dataToExport.getLon()).append(SEPERATOR);
+		row.append(dataToExport.getAlt()).append(SEPERATOR);
+		List<WifiNetworkExport> wifiNetworksList = dataToExport.getWifiNetworks();
+		int sizeUpToTen = getSizeUpToTen(wifiNetworksList.size());
+		row.append("" + sizeUpToTen).append(SEPERATOR);
+		for (int i = 0; i < sizeUpToTen; i++) {
+			WifiNetworkExport wifiNetworkExport = wifiNetworksList.get(i);
+			row.append(wifiNetworkExport.getSSID()).append(SEPERATOR);
+			row.append(wifiNetworkExport.getMAC()).append(SEPERATOR);
+			row.append(wifiNetworkExport.getFreuncy()).append(SEPERATOR);
+			row.append(wifiNetworkExport.getSignal()).append(SEPERATOR);
+		}
+		return row.toString();
+	}
+
+	public static int getSizeUpToTen(int size) {
+		if(size <= 10){
+			return size;
+		}
+		return 10;
+	}
+
+	public static String buildCSVData(List<DataToExport> DataToExportList) {
+		StringBuilder csvStringBuilder = buildHeadRow();
+		csvStringBuilder.append("\n");
+		for (DataToExport dataToExport : DataToExportList) {
+			String rowFromDataToExport = getRowFromDataToExport(dataToExport);
+			csvStringBuilder.append(rowFromDataToExport).append("\n");
+		}
+		String csvString = csvStringBuilder.toString();
+		return csvString;
+	}
+		
+	public static StringBuilder buildHeadRow() {
+		StringBuilder headRow = new StringBuilder();
+		headRow.append("Time").append(SEPERATOR);
+		headRow.append("ID").append(SEPERATOR);
+		headRow.append("Lat").append(SEPERATOR);
+		headRow.append("Lon").append(SEPERATOR);
+		headRow.append("Alt").append(SEPERATOR);
+		headRow.append("#WiFi networks").append(SEPERATOR);
+		for (int i = 1; i < 11; i++) {
+			headRow.append("SSID" + i).append(SEPERATOR);
+			headRow.append("MAC" + i).append(SEPERATOR);
+			headRow.append("Frequncy" + i).append(SEPERATOR);
+			headRow.append("Signal" + i).append(SEPERATOR);
+		}
+		return headRow;
+	}
+
+	
+	
 }

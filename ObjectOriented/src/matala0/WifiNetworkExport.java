@@ -1,5 +1,9 @@
 package matala0;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class WifiNetworkExport {
 
 	private String SSID;
@@ -32,4 +36,18 @@ public class WifiNetworkExport {
 	public void setSignal(int signal) {
 		this.signal = signal;
 	}
+	
+
+	public static WifiNetworkExport buildWifinetworkToExport(WifiNetworkImport wifiNetworkImport) {
+		WifiNetworkExport wifiNetworkExport = new WifiNetworkExport();
+		wifiNetworkExport.setSSID(wifiNetworkImport.getSSID());
+		wifiNetworkExport.setSignal(wifiNetworkImport.getRSSI());
+		wifiNetworkExport.setMAC(wifiNetworkImport.getMAC());
+		wifiNetworkExport.setFreuncy(wifiNetworkImport.getAccuracyMeters());
+		return wifiNetworkExport;
+	}
+	
+	
+	
+
 }
