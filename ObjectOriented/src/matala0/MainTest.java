@@ -82,7 +82,17 @@ public class MainTest {
 
 	@Test
 	public void testBuildDescription() {
-		fail("Not yet implemented");
+		String expected = "Id: 123\nTime: Sat Oct 28 20:10:00 IDT 2017\nAlt: 10.0\n\nFreuncy: 0\nMAC: test\nSignal: 0\n";
+		
+		WifiNetworkExport act = new WifiNetworkExport();
+		act.setFreuncy(0);
+		act.setMAC("test");
+		act.setSignal(0);
+		
+		String actual = Main.buildDescription(act, "Id: 123\nTime: Sat Oct 28 20:10:00 IDT 2017\nAlt: 10.0\n\n");
+		
+		assertEquals(expected, actual);
+		
 	}
 
 
