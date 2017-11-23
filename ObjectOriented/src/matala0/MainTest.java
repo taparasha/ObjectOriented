@@ -32,13 +32,31 @@ public class MainTest {
 	@Test
 	public void testSortWifiNetworksBySignal() {
 		
-		List<WifiNetworkExport> WifiNetworkExport = new ArrayList<>();
-        
+		List<WifiNetworkExport> actual = new ArrayList<>();
+		WifiNetworkExport big = new WifiNetworkExport();
+		WifiNetworkExport mid = new WifiNetworkExport();
+		WifiNetworkExport small = new WifiNetworkExport();
 		
+		big.setSignal(-60);
+		mid.setSignal(-40);
+		small.setSignal(-20);
 		
+		actual.add(small);
+		actual.add(big);
+		actual.add(mid);
 		
+		Main.sortWifiNetworksBySignal(actual);
 		
-		fail("Not yet implemented");
+		List<WifiNetworkExport> expected = new ArrayList<>();
+
+		expected.add(small);
+		expected.add(mid);
+		expected.add(big);
+		
+		String a = ""+actual.get(0)+actual.get(1)+actual.get(2)+"";
+		String b = ""+expected.get(0)+expected.get(1)+expected.get(2)+"";
+		
+		assertEquals(a, b);	
 	}
 
 	@Test
