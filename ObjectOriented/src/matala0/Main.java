@@ -64,6 +64,35 @@ public class Main {
 
 		String csvString = DataToExport.buildCSVData(dataToExportList);
 		saveToCsvFile(csvString);
+		
+		/*
+		
+		//Sort By Coordinates/Time from Client
+		System.out.println("Enter what category you want to sort by:\n (c=coordinate, t=time:");
+		char category = in.nextChar();
+		if (category=='c'){
+			System.out.println("Enter Lat:");
+			double lat = in.nextDouble();
+			
+			System.out.println("Enter Lon:");
+			double lon = in.nextDouble();
+			
+			System.out.println("Enter Radius:");
+			double radius = in.nextDouble();
+			
+			DataToExport.SortListByC(dataToExportList, lat, lon, radius);
+		}
+		
+		if(category=='t'){
+			System.out.println("Enter Time (formt YYYY-MM-DD HH-MM-SS):");
+			String time = in.nextString();
+			DataToExport.SortListByT(dataToExportList, time);
+		}
+		
+		*/
+		
+		
+		
 		saveTokmlFile(dataToExportList);
 
 	}
@@ -90,6 +119,7 @@ public class Main {
 	
 	
 	public static void saveTokmlFile(List<DataToExport> dataToExportList) {
+		
 		Kml kml = new Kml();
 		Folder kmlFolder = kml.createAndSetFolder();
 		Document kmlDocument = kml.createAndSetDocument();
