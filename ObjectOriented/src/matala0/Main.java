@@ -68,23 +68,26 @@ public class Main {
 		/*
 		
 		//Sort By Coordinates/Time from Client
+		
+		Scanner in = new Scanner(System.in);
+		
 		System.out.println("Enter what category you want to sort by:\n (c=coordinate, t=time:");
 		char category = in.nextChar();
 		if (category=='c'){
-			System.out.println("Enter Lat:");
+			System.out.println("Enter Lat:\n");
 			double lat = in.nextDouble();
 			
-			System.out.println("Enter Lon:");
+			System.out.println("Enter Lon:\n");
 			double lon = in.nextDouble();
 			
-			System.out.println("Enter Radius:");
+			System.out.println("Enter Radius:\n");
 			double radius = in.nextDouble();
 			
 			DataToExport.SortListByC(dataToExportList, lat, lon, radius);
 		}
 		
 		if(category=='t'){
-			System.out.println("Enter Time (formt YYYY-MM-DD HH-MM-SS):");
+			System.out.println("Enter Time (formt YYYY-MM-DD HH-MM-SS):\n");
 			String time = in.nextString();
 			DataToExport.SortListByT(dataToExportList, time);
 		}
