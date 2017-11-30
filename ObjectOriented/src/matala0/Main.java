@@ -62,8 +62,6 @@ public class Main {
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
 		
-		
-		
 		/**
 		 * @description
 		 * Sort By Coordinates/Time from Client
