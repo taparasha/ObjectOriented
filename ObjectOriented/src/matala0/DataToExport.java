@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 
+ * @description
+ * make list of abstract calld dataToExport with 6 parameters.
+ * id, time, lat, lon, alt and list of the local wifiNetwork spots
+ *
+ */
 public class DataToExport {
 
 	public static final String SEPERATOR = ",";
