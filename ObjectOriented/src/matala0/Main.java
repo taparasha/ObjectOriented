@@ -87,9 +87,10 @@ public class Main {
 				}
 				
 				if(category==2){
-					System.out.println("Enter Time (formt YYYY-MM-DD HH-MM-SS):\n");
+					System.out.println("Enter Time in format as the follow:(YYYY-MM-DD HH-MM-SS):\n");
+					
+					System.out.println(dataToExportList.get(0).getTime().toString()+"\n");
 					String time = in.next();
-					DataToExport.SortListByT(dataToExportList, time);
 					
 					List<DataToExport> sortListByT = DataToExport.SortListByT(dataToExportList, time);
 					dataToExportList = sortListByT;
