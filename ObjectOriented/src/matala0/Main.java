@@ -42,8 +42,6 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 
 public class Main {
 
-	
-
 
 	public static void main(String[] args) {
 		
@@ -107,8 +105,14 @@ public class Main {
 
 	}
 
-
-	//https://stackoverflow.com/questions/8432581/how-to-sort-a-listobject-alphabetically-using-object-name-field
+	/**
+	 * sortBySignal
+	 * the function take the wifiNetworkExport and sort it by signal.
+	 * at the writing, the program will write only the first 10
+	 * 
+	 * https://stackoverflow.com/questions/8432581/how-to-sort-a-listobject-alphabetically-using-object-name-field
+	 */
+	
 	public static List<WifiNetworkExport> sortWifiNetworksBySignal(List<WifiNetworkExport> wifiNetworkExport){
 		if (wifiNetworkExport.size() > 0) {
 			Collections.sort(wifiNetworkExport, new Comparator<WifiNetworkExport>() {
@@ -120,12 +124,6 @@ public class Main {
 		}
 		return wifiNetworkExport;
 	}
-	
-	
-	
 
-
-
-	
 
 }

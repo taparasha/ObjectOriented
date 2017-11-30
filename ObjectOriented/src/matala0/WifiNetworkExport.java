@@ -47,7 +47,26 @@ public class WifiNetworkExport {
 		return wifiNetworkExport;
 	}
 	
+	/**
+	 * sortBySignal
+	 * the function take the wifiNetworkExport and sort it by signal.
+	 * at the writing, the program will write only the first 10
+	 * 
+	 * https://stackoverflow.com/questions/8432581/how-to-sort-a-listobject-alphabetically-using-object-name-field
+	 */
 	
+	public static List<WifiNetworkExport> sortWifiNetworksBySignal(List<WifiNetworkExport> wifiNetworkExport){
+		if (wifiNetworkExport.size() > 0) {
+			Collections.sort(wifiNetworkExport, new Comparator<WifiNetworkExport>() {
+				@Override
+				public int compare(final WifiNetworkExport object1, final WifiNetworkExport object2) {
+					return ((Integer)((object1.getSignal()) * (-1))).compareTo(((Integer)((object2.getSignal() * (-1)))));
+				}
+			});
+		}
+		return wifiNetworkExport;
+	}
+
 	
 
 }
