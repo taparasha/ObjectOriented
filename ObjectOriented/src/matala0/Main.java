@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -61,14 +62,47 @@ public class Main {
 			List<WifiNetworkExport> sortWifiNetworksBySignal = sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
-
+		
+		
+		
+		//Sort By Coordinates/Time from Client
+		
+				Scanner in = new Scanner(System.in);
+				
+				System.out.println("Enter what category you want to sort by (1=coordinate, 2=time):\n");
+				int category = in.nextInt();
+				
+				if (category==1){
+					System.out.println("Enter Lat:\n");
+					double lat = in.nextDouble();
+					
+					System.out.println("Enter Lon:\n");
+					double lon = in.nextDouble();
+					
+					System.out.println("Enter Radius:\n");
+					double radius = in.nextDouble();
+					
+					List<DataToExport> sortListByC = DataToExport.SortListByC(dataToExportList, lat, lon, radius);
+					dataToExportList = sortListByC;
+				}
+				
+				if(category==2){
+					System.out.println("Enter Time (formt YYYY-MM-DD HH-MM-SS):\n");
+					String time = in.next();
+					DataToExport.SortListByT(dataToExportList, time);
+					
+					List<DataToExport> sortListByT = DataToExport.SortListByT(dataToExportList, time);
+					dataToExportList = sortListByT;
+				}
+				
 		String csvString = DataToExport.buildCSVData(dataToExportList);
+		
 		saveToCsvFile(csvString);
 		saveTokmlFile(dataToExportList);
 
 	}
 
-	
+
 	//https://stackoverflow.com/questions/8432581/how-to-sort-a-listobject-alphabetically-using-object-name-field
 	public static List<WifiNetworkExport> sortWifiNetworksBySignal(List<WifiNetworkExport> wifiNetworkExport){
 		if (wifiNetworkExport.size() > 0) {
@@ -88,7 +122,10 @@ public class Main {
 	//https://developers.google.com/kml/documentation/kml_tut#placemarks                 KML FORMAT
 	//http://freegeographytools.com/2007/putting-time-data-into-a-kml-file               TIMELINE
 	
-	
+	/**
+	 * 
+	 * @param dataToExportList 
+	 */
 	public static void saveTokmlFile(List<DataToExport> dataToExportList) {
 		Kml kml = new Kml();
 		Folder kmlFolder = kml.createAndSetFolder();
