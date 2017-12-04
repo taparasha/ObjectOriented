@@ -74,7 +74,7 @@ public class MainTest {
 		act.setAlt(10);
 		
 		String expected = "Id: 123\nTime: Sat Oct 28 20:10:00 IDT 2017\nAlt: 10.0\n\n";
-		String actual = Main.buildLineDescription(act);
+		String actual = KMLandCSVbuild.buildLineDescription(act);
 		
 		assertEquals(expected, actual);
 		
@@ -89,7 +89,7 @@ public class MainTest {
 		act.setMAC("test");
 		act.setSignal(0);
 		
-		String actual = Main.buildDescription(act, "Id: 123\nTime: Sat Oct 28 20:10:00 IDT 2017\nAlt: 10.0\n\n");
+		String actual = KMLandCSVbuild.buildDescription(act, "Id: 123\nTime: Sat Oct 28 20:10:00 IDT 2017\nAlt: 10.0\n\n");
 		
 		assertEquals(expected, actual);
 		

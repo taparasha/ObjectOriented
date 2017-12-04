@@ -42,7 +42,6 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 
 public class Main {
 
-
 	public static void main(String[] args) {
 		
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();

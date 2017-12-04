@@ -117,7 +117,7 @@ public class WifiNetworkImport {
 				wifiNetworkImport.setCurrentLatitude(Double.parseDouble(entries[6]));
 				wifiNetworkImport.setCurrentLongitude(Double.parseDouble(entries[7]));
 				wifiNetworkImport.setAltitudeMeters(Double.parseDouble(entries[8]));
-				wifiNetworkImport.setAccuracyMeters(Integer.parseInt(entries[9]));
+		//		wifiNetworkImport.setAccuracyMeters(Integer.parseInt(entries[9]));
 				wifiNetworkImport.setType(entries[10]);
 
 				if (wifiNetworkImport != null){
