@@ -9,7 +9,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * 
+ * @description
+ * the object has 11 unit from the csv file
+ * the class convert the string to units at the object
+ *
+ */
 public class WifiNetworkImport {
 	
 	private String SSID;
@@ -91,7 +97,11 @@ public class WifiNetworkImport {
 		this.type = type;
 	}
 	
-	
+	/**
+	 * 
+	 * @the function convert every csv row to an WifiNetworkImport object
+	 * @return list of WifiNetworkImport objects for each line
+	 */
 	public static List<WifiNetworkImport> convertCsvToWifiNetworkImport(File file){
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
 		BufferedReader br = null;
@@ -110,7 +120,7 @@ public class WifiNetworkImport {
 				String[] entries = line.split(",");
 				wifiNetworkImport.setMAC(entries[0]);
 				wifiNetworkImport.setSSID(entries[1]);
-				wifiNetworkImport.setAuthMode(entries[2]);
+		//		wifiNetworkImport.setAuthMode(entries[2]);
 				wifiNetworkImport.setFirstSeen(getDateFromString(entries[3]));
 				wifiNetworkImport.setChannel(Integer.parseInt(entries[4]));
 				wifiNetworkImport.setRSSI(Integer.parseInt(entries[5]));
@@ -118,7 +128,7 @@ public class WifiNetworkImport {
 				wifiNetworkImport.setCurrentLongitude(Double.parseDouble(entries[7]));
 				wifiNetworkImport.setAltitudeMeters(Double.parseDouble(entries[8]));
 		//		wifiNetworkImport.setAccuracyMeters(Integer.parseInt(entries[9]));
-				wifiNetworkImport.setType(entries[10]);
+		//		wifiNetworkImport.setType(entries[10]);
 
 				if (wifiNetworkImport != null){
 					wifiNetworkImportList.add(wifiNetworkImport);
@@ -141,7 +151,12 @@ public class WifiNetworkImport {
 	}
 
 	
-	
+	/**
+	 * 
+	 * @param stringDate
+	 * get string from csv file at the field date
+	 * @return the same date as a Date object in Date format
+	 */
 
 	public static Date getDateFromString(String stringDate) {
 		Date date = null;

@@ -59,6 +59,12 @@ public class DataToExport {
 		this.wifiNetworks = wifiNetworks;
 	}
 	
+	/**
+	 * 
+	 * @param wifiNetworkImportList
+	 * the function receive a list of WifiNetworkImports objects and added each object to DataToExport object at the list feild.
+	 * @return list of DataToExport objects with the WifiNetworkImport dots in the list
+	 */
 	public static List<DataToExport> buildDataToExportList(List<WifiNetworkImport> wifiNetworkImportList) {
 		List<DataToExport> dataToExportList = new ArrayList<>();
 		int i = 1;
@@ -79,7 +85,10 @@ public class DataToExport {
 		}
 		return dataToExportList;
 	}
-
+	
+	/**
+	 * @description make DataToExport object with 6 units. the sixth field is a list of WifiNetworkExport objects
+	 */
 	public static DataToExport buildDataToExport(WifiNetworkImport wifiNetworkImport,
 			WifiNetworkExport wifiNetworkExport, int index) {
 		DataToExport dataToExport = new DataToExport();
@@ -148,6 +157,15 @@ public class DataToExport {
 	}
 
 	//https://stackoverflow.com/questions/837872/calculate-distance-in-meters-when-you-know-longitude-and-latitude-in-java
+	/**
+	 * 
+	 * @param lat1
+	 * @param lng1
+	 * @param lat2
+	 * @param lng2
+	 * get 2 points
+	 * @return the distance between
+	 */
 	private static double distance(double lat1, double lng1, double lat2, double lng2) {
 	    double earthRadius = 6371000; //meters
 	    double dLat = Math.toRadians(lat2-lat1);
@@ -160,7 +178,14 @@ public class DataToExport {
 
 	    return dist;
 	    }
-	
+	/**
+	 * 
+	 * @param dataToExportList
+	 * @param lat
+	 * @param lon
+	 * @param radius
+	 * @return DataToExport list sorted by coordinates
+	 */
 	public static List<DataToExport> SortListByC(List<DataToExport> dataToExportList, double lat, double lon, double radius){
 		List<DataToExport> sortList = new ArrayList<>();
 		for(DataToExport a : dataToExportList){
@@ -170,7 +195,12 @@ public class DataToExport {
 		}
 		return sortList;
 	}
-	
+	/**
+	 * 
+	 * @param dataToExportList
+	 * @param time
+	 * @return DataToExport list sorted by time
+	 */
 	public static List<DataToExport> SortListByT(List<DataToExport> dataToExportList, String time){
 		
 		List<DataToExport> sortList = new ArrayList<>();

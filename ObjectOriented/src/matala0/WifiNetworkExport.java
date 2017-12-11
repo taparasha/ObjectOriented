@@ -3,7 +3,12 @@ package matala0;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
+/**
+ * 
+ * the object WifiNetworkExport got 4 units from the WifiNetworkImport.
+ * the units present each wifi networt in specific spot.
+ *
+ */
 public class WifiNetworkExport {
 
 	private String SSID;
@@ -37,7 +42,11 @@ public class WifiNetworkExport {
 		this.signal = signal;
 	}
 	
-
+/**
+ * 
+ * @param wifiNetworkImport
+ * @return an object WifiNetworkExport with the 4 correct units
+ */
 	public static WifiNetworkExport buildWifinetworkToExport(WifiNetworkImport wifiNetworkImport) {
 		WifiNetworkExport wifiNetworkExport = new WifiNetworkExport();
 		wifiNetworkExport.setSSID(wifiNetworkImport.getSSID());

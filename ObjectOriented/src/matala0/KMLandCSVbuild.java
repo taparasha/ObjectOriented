@@ -26,7 +26,11 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.Style;
 import de.micromata.opengis.kml.v_2_2_0.StyleSelector;
 
-
+/**
+ * 
+ * class for the csv and kml function.
+ *
+ */
 public class KMLandCSVbuild {
 
 	public static String BASE_PATH = "C:\\tmp";
@@ -44,6 +48,8 @@ public class KMLandCSVbuild {
 		/**
 		 * 
 		 * @param dataToExportList 
+		 * read each object from the list and convert it to placmark in kml object
+		 * @return kml file
 		 */
 		public static void saveTokmlFile(List<DataToExport> dataToExportList) {
 			Kml kml = new Kml();
@@ -74,12 +80,14 @@ public class KMLandCSVbuild {
 			try {
 				kml.marshal(new File(BASE_PATH + KML_FILE_NAME));
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		
+		/**
+		 * build the URL line at the folder in kml file that "provide" the singal icon type
+		 * @return
+		 */
 		public static List<StyleSelector> getStyleSelectorList() {
 			List<StyleSelector> styleSelectorList = new ArrayList<>();
 			Style redStyle = getStyleByColorAndHref("red", "http://maps.google.com/mapfiles/ms/icons/red-dot.png");
@@ -114,7 +122,11 @@ public class KMLandCSVbuild {
 			else styleURL = "#yellow";
 			return styleURL;
 		}
-
+		/**
+		 * 
+		 * @param dataToExport chffcfucfu
+		 * @return
+		 */
 		public static String buildLineDescription(DataToExport dataToExport) {
 			StringBuilder ret = new StringBuilder();
 			ret.append("Id: " + dataToExport.getId() + "\n");
