@@ -43,7 +43,7 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 public class Main {
 
 	public static void main(String[] args) {
-		
+
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
 
 		List<File> csvFiles = KMLandCSVbuild.getFilesList();
@@ -60,46 +60,53 @@ public class Main {
 			List<WifiNetworkExport> sortWifiNetworksBySignal = sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
-		
+
 		/**
 		 * @description
 		 * Sort By Coordinates/Time from Client
 		 */
-		
-				Scanner in = new Scanner(System.in);
-				
-				System.out.println("Enter what category you want to sort by (1=coordinate, 2=time):\n");
-				int category = in.nextInt();
-				
-				if (category==1){
-					System.out.println("Enter Lat:\n");
-					double lat = in.nextDouble();
-					
-					System.out.println("Enter Lon:\n");
-					double lon = in.nextDouble();
-					
-					System.out.println("Enter Radius:\n");
-					double radius = in.nextDouble();
-					
-					List<DataToExport> sortListByC = DataToExport.SortListByC(dataToExportList, lat, lon, radius);
-					dataToExportList = sortListByC;
-				}
-				
-				if(category==2){
-					System.out.println("Enter Time in format as the follow:(YYYY-MM-DD HH-MM-SS):\n");
-					
-					System.out.println(dataToExportList.get(0).getTime().toString()+"\n");
-					String time = in.next();
-					
-					List<DataToExport> sortListByT = DataToExport.SortListByT(dataToExportList, time);
-					dataToExportList = sortListByT;
-				}
-				
-		String csvString = DataToExport.buildCSVData(dataToExportList);
-		
-		KMLandCSVbuild.saveToCsvFile(csvString);
-		KMLandCSVbuild.saveTokmlFile(dataToExportList);
 
+		Scanner in = new Scanner(System.in);
+
+		System.out.println("Enter what category you want to sort by (1=coordinate, 2=time):\n");
+		int category = in.nextInt();
+
+		if (category==1){
+			System.out.println("Enter Lat:\n");
+			double lat = in.nextDouble();
+
+			System.out.println("Enter Lon:\n");
+			double lon = in.nextDouble();
+
+			System.out.println("Enter Radius:\n");
+			double radius = in.nextDouble();
+
+			List<DataToExport> sortListByC = DataToExport.SortListByC(dataToExportList, lat, lon, radius);
+			dataToExportList = sortListByC;
+		}
+
+		if(category==2){
+			System.out.println("Enter Time in format as the follow:(YYYY-MM-DD HH-MM-SS):\n");
+
+			System.out.println(dataToExportList.get(0).getTime().toString()+"\n");
+			String time = in.next();
+
+			List<DataToExport> sortListByT = DataToExport.SortListByT(dataToExportList, time);
+			dataToExportList = sortListByT;
+		}
+
+	//	String csvString = DataToExport.buildCSVData(dataToExportList);
+
+		//KMLandCSVbuild.saveToCsvFile(csvString);
+		//KMLandCSVbuild.saveTokmlFile(dataToExportList);
+		
+		
+		List<WifiNetworkImport> matala2A = createListOfMac(wifiNetworkImportList);
+		List<DataToExport> dataToExportList2A = DataToExport.buildDataToExportList(matala2A);
+		String csvString2A = DataToExport.buildCSVData(dataToExportList2A);
+
+		KMLandCSVbuild.saveToCsvFile(csvString2A);
+		KMLandCSVbuild.saveTokmlFile(dataToExportList2A);
 	}
 
 	/**
@@ -109,7 +116,7 @@ public class Main {
 	 * 
 	 * https://stackoverflow.com/questions/8432581/how-to-sort-a-listobject-alphabetically-using-object-name-field
 	 */
-	
+
 	public static List<WifiNetworkExport> sortWifiNetworksBySignal(List<WifiNetworkExport> wifiNetworkExport){
 		if (wifiNetworkExport.size() > 0) {
 			Collections.sort(wifiNetworkExport, new Comparator<WifiNetworkExport>() {
@@ -123,4 +130,67 @@ public class Main {
 	}
 
 
+	public static List<WifiNetworkImport> createListOfMac(List <WifiNetworkImport> WifiNetworkImportList){
+		List<WifiNetworkImport> temp = new ArrayList<>();
+		for(WifiNetworkImport a: WifiNetworkImportList){
+			temp.add(createMac(WifiNetworkImportList,a.getMAC()));
+		}
+		
+		return temp;
+	}
+
+	public static WifiNetworkImport createMac(List <WifiNetworkImport> WifiNetworkImportList, String mac){
+		List<WifiNetworkImport> temp = new ArrayList<>();
+		for(WifiNetworkImport a: WifiNetworkImportList){
+				if(a.getMAC().equals(mac)){
+					temp.add(a);
+				//	WifiNetworkImportList.remove(a);
+			}
+		}
+		sortWifiNetwork(temp);
+		List<WifiNetworkImport> answers = new ArrayList<>();
+		/*for(int i=0;i<3;i++){
+			answers.add(temp.get(i));
+		}*/
+		WifiNetworkImport answer = Algo1(temp);
+		return answer;
+	}
+
+	public static List<WifiNetworkImport> sortWifiNetwork(List<WifiNetworkImport> wifiNetworkImport){
+		if (wifiNetworkImport.size() > 0) {
+			Collections.sort(wifiNetworkImport, new Comparator<WifiNetworkImport>() {
+				@Override
+				public int compare(final WifiNetworkImport object1, final WifiNetworkImport object2) {
+					return ((Integer)((object1.getRSSI()) * (-1))).compareTo(((Integer)((object2.getRSSI() * (-1)))));
+				}
+			});
+		}
+		return wifiNetworkImport;
+	}
+	
+	private static WifiNetworkImport Algo1(List<WifiNetworkImport> WifiMacList){
+		WifiNetworkImport answer = new WifiNetworkImport();
+		double sumLat=0, sumLon=0, sumAlt=0;
+		double sumSignal=0;
+		for(WifiNetworkImport a: WifiMacList){
+			sumAlt=+(a.getAltitudeMeters()*(1/(Math.pow(a.getRSSI(), 2))));
+			sumLon=+(a.getCurrentLongitude()*(1/(Math.pow(a.getRSSI(), 2))));                          
+			sumLat=+(a.getCurrentLatitude()*(1/(Math.pow(a.getRSSI(), 2))));   	
+			sumSignal=+(1/(Math.pow(a.getRSSI(), 2)));	
+			answer.setMAC(a.getMAC());
+		}
+		System.out.println("sumAlt: "+sumAlt);
+		answer.setAltitudeMeters(sumAlt/sumSignal);
+		answer.setCurrentLongitude(sumLon/sumSignal);
+		answer.setCurrentLatitude(sumLat/sumSignal);
+		answer.setRSSI(0);
+		answer.setFirstSeen(WifiMacList.get(0).getFirstSeen());
+		answer.setSSID("");
+		answer.setChannel(0);
+		
+		
+		return answer;
+	}
+
+	
 }
