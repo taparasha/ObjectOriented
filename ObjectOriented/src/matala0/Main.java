@@ -54,13 +54,17 @@ public class Main {
 		}
 
 		List<DataToExport> dataToExportList = DataToExport.buildDataToExportList(wifiNetworkImportList);
-
+		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
+       
+		
 
 		for (DataToExport dataToExport : dataToExportList) {
 			List<WifiNetworkExport> sortWifiNetworksBySignal = sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
 
+		
+		
 		/**
 		 * @description
 		 * Sort By Coordinates/Time from Client
@@ -74,10 +78,8 @@ public class Main {
 		if (category==1){
 			System.out.println("Enter Lat:\n");
 			double lat = in.nextDouble();
-
 			System.out.println("Enter Lon:\n");
 			double lon = in.nextDouble();
-
 			System.out.println("Enter Radius:\n");
 			double radius = in.nextDouble();
 
@@ -87,7 +89,6 @@ public class Main {
 
 		if(category==2){
 			System.out.println("Enter Time in format as the follow:(YYYY-MM-DD HH-MM-SS):\n");
-
 			System.out.println(dataToExportList.get(0).getTime().toString()+"\n");
 			String time = in.next();
 
@@ -95,18 +96,16 @@ public class Main {
 			dataToExportList = sortListByT;
 		}
 
-	//	String csvString = DataToExport.buildCSVData(dataToExportList);
-
-		//KMLandCSVbuild.saveToCsvFile(csvString);
-		//KMLandCSVbuild.saveTokmlFile(dataToExportList);
+		String csvString = DataToExport.buildCSVData(dataToExportList);
+		KMLandCSVbuild.saveToCsvFile(csvString);
+		KMLandCSVbuild.saveTokmlFile(dataToExportList);
 		
 		
-		List<WifiNetworkImport> matala2A = createListOfMac(wifiNetworkImportList);
-		List<DataToExport> dataToExportList2A = DataToExport.buildDataToExportList(matala2A);
-		String csvString2A = DataToExport.buildCSVData(dataToExportList2A);
-
-		KMLandCSVbuild.saveToCsvFile(csvString2A);
-		KMLandCSVbuild.saveTokmlFile(dataToExportList2A);
+	//	List<WifiNetworkImport> matala2A = createListOfMac(wifiNetworkImportList);
+	//	List<DataToExport> dataToExportList2A = DataToExport.buildDataToExportList(matala2A);
+	//	String csvString2A = DataToExport.buildCSVData(dataToExportList2A);
+	//	KMLandCSVbuild.saveToCsvFile(csvString2A);
+	//	KMLandCSVbuild.saveTokmlFile(dataToExportList2A);
 	}
 
 	/**
@@ -139,6 +138,7 @@ public class Main {
 		return temp;
 	}
 
+	
 	public static WifiNetworkImport createMac(List <WifiNetworkImport> WifiNetworkImportList, String mac){
 		List<WifiNetworkImport> temp = new ArrayList<>();
 		for(WifiNetworkImport a: WifiNetworkImportList){

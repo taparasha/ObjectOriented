@@ -115,7 +115,7 @@ public class WifiNetworkImport {
 
 
 			while ((line = br.readLine()) != null) {
-				System.out.println("Line: " + i++ + ") " + line);
+		//		System.out.println("Line: " + i++ + ") " + line);
 				WifiNetworkImport wifiNetworkImport = new WifiNetworkImport();
 				String[] entries = line.split(",");
 				wifiNetworkImport.setMAC(entries[0]);
