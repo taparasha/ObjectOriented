@@ -55,18 +55,24 @@ public class Main {
 
 		List<DataToExport> dataToExportList = DataToExport.buildDataToExportList(wifiNetworkImportList);
 		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
-       
-		
 
+		for(MacImprove a: MacImproveList){
+			ReduceMacList(MacImproveList,a.getMAC());
+			
+		}
+
+
+		
+		
+		
 		for (DataToExport dataToExport : dataToExportList) {
 			List<WifiNetworkExport> sortWifiNetworksBySignal = sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
 
-		
-		
+
+
 		/**
-		 * @description
 		 * Sort By Coordinates/Time from Client
 		 */
 
@@ -100,12 +106,11 @@ public class Main {
 		KMLandCSVbuild.saveToCsvFile(csvString);
 		KMLandCSVbuild.saveTokmlFile(dataToExportList);
 		
-		
-	//	List<WifiNetworkImport> matala2A = createListOfMac(wifiNetworkImportList);
-	//	List<DataToExport> dataToExportList2A = DataToExport.buildDataToExportList(matala2A);
-	//	String csvString2A = DataToExport.buildCSVData(dataToExportList2A);
-	//	KMLandCSVbuild.saveToCsvFile(csvString2A);
-	//	KMLandCSVbuild.saveTokmlFile(dataToExportList2A);
+		//	List<WifiNetworkImport> matala2A = createListOfMac(wifiNetworkImportList);
+		//	List<DataToExport> dataToExportList2A = DataToExport.buildDataToExportList(matala2A);
+		//	String csvString2A = DataToExport.buildCSVData(dataToExportList2A);
+		//	KMLandCSVbuild.saveToCsvFile(csvString2A);
+		//	KMLandCSVbuild.saveTokmlFile(dataToExportList2A);
 	}
 
 	/**
@@ -128,17 +133,69 @@ public class Main {
 		return wifiNetworkExport;
 	}
 
+	/**
+	 * מפה קוד של מטלה 2
+	 * @param WifiNetworkImportList
+	 * @return
+	 */
 
+	public static List <MacImprove> ReduceMacList(List <MacImprove> MacImproveList, String mac){
+		List<MacImprove> temp = new ArrayList<>();
+		for(MacImprove a: MacImproveList){
+			if(a.getMAC().equals(mac)){
+				temp.add(a);
+		   //  	System.out.println(a.getMAC());
+			//	System.out.println(a.getRSSI());
+				//	WifiNetworkImportList.remove(a);
+			}
+		}
+		SortMacImproveList(temp);
+		List<MacImprove> answers = new ArrayList<>();
+		int i=1;
+		
+		for(MacImprove a: temp){
+			if(i%4==0)
+			   continue;
+			else {
+			System.out.println(a.getMAC());
+		//	System.out.println(a.getRSSI());
+			answers.add(a);
+			i++;
+			}
+		}
+	
+	//	WifiNetworkImport answer = Algo1(temp);
+		for(MacImprove a: answers){
+		//	System.out.println(a.getMAC());
+		}
+		return answers;
+	}
+
+	public static List<MacImprove> SortMacImproveList(List<MacImprove> MacImproveList){
+		if (MacImproveList.size() > 0) {
+			Collections.sort(MacImproveList, new Comparator<MacImprove>() {
+				@Override
+				public int compare(final MacImprove object1, final MacImprove object2) {
+					return ((Integer)((object1.getRSSI()) * (-1))).compareTo(((Integer)((object2.getRSSI() * (-1)))));
+				}
+			});
+		}
+		return MacImproveList;
+	}
+
+
+
+	/*
 	public static List<WifiNetworkImport> createListOfMac(List <WifiNetworkImport> WifiNetworkImportList){
 		List<WifiNetworkImport> temp = new ArrayList<>();
 		for(WifiNetworkImport a: WifiNetworkImportList){
 			temp.add(createMac(WifiNetworkImportList,a.getMAC()));
 		}
-		
+
 		return temp;
 	}
 
-	
+
 	public static WifiNetworkImport createMac(List <WifiNetworkImport> WifiNetworkImportList, String mac){
 		List<WifiNetworkImport> temp = new ArrayList<>();
 		for(WifiNetworkImport a: WifiNetworkImportList){
@@ -151,7 +208,7 @@ public class Main {
 		List<WifiNetworkImport> answers = new ArrayList<>();
 		/*for(int i=0;i<3;i++){
 			answers.add(temp.get(i));
-		}*/
+		}
 		WifiNetworkImport answer = Algo1(temp);
 		return answer;
 	}
@@ -167,7 +224,7 @@ public class Main {
 		}
 		return wifiNetworkImport;
 	}
-	
+
 	private static WifiNetworkImport Algo1(List<WifiNetworkImport> WifiMacList){
 		WifiNetworkImport answer = new WifiNetworkImport();
 		double sumLat=0, sumLon=0, sumAlt=0;
@@ -187,10 +244,10 @@ public class Main {
 		answer.setFirstSeen(WifiMacList.get(0).getFirstSeen());
 		answer.setSSID("");
 		answer.setChannel(0);
-		
-		
+
+
 		return answer;
 	}
+	 */
 
-	
 }

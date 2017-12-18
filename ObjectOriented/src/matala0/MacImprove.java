@@ -48,7 +48,7 @@ public class MacImprove {
 	}
 
 	/**
-	 * this function take data from wifinetworkimport object and enter it to MacImprove object.
+	 * this function take data from WifiNetworkImport object and enter it to MacImprove object.
 	 * @param wifiNetworkImport
 	 * @return MacImprove object
 	 */
