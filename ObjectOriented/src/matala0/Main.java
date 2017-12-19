@@ -55,22 +55,13 @@ public class Main {
 
 		List<DataToExport> dataToExportList = DataToExport.buildDataToExportList(wifiNetworkImportList);
 		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
-
-		for(MacImprove a: MacImproveList){
-			ReduceMacList(MacImproveList,a.getMAC());
-			
-		}
-
-
-		
-		
+	//	MacImprove.OrgenizeMacImproveList(MacImproveList);
+         
 		
 		for (DataToExport dataToExport : dataToExportList) {
 			List<WifiNetworkExport> sortWifiNetworksBySignal = sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
-
-
 
 		/**
 		 * Sort By Coordinates/Time from Client
@@ -105,7 +96,7 @@ public class Main {
 		String csvString = DataToExport.buildCSVData(dataToExportList);
 		KMLandCSVbuild.saveToCsvFile(csvString);
 		KMLandCSVbuild.saveTokmlFile(dataToExportList);
-		
+
 		//	List<WifiNetworkImport> matala2A = createListOfMac(wifiNetworkImportList);
 		//	List<DataToExport> dataToExportList2A = DataToExport.buildDataToExportList(matala2A);
 		//	String csvString2A = DataToExport.buildCSVData(dataToExportList2A);
@@ -138,49 +129,34 @@ public class Main {
 	 * @param WifiNetworkImportList
 	 * @return
 	 */
-
-	public static List <MacImprove> ReduceMacList(List <MacImprove> MacImproveList, String mac){
-		List<MacImprove> temp = new ArrayList<>();
-		for(MacImprove a: MacImproveList){
-			if(a.getMAC().equals(mac)){
-				temp.add(a);
-		   //  	System.out.println(a.getMAC());
-			//	System.out.println(a.getRSSI());
-				//	WifiNetworkImportList.remove(a);
-			}
-		}
-		SortMacImproveList(temp);
-		List<MacImprove> answers = new ArrayList<>();
-		int i=1;
-		
-		for(MacImprove a: temp){
+				
+		/*for(MacImprove a: temp){
 			if(i%4==0)
-			   continue;
-			else {
-			System.out.println(a.getMAC());
-		//	System.out.println(a.getRSSI());
-			answers.add(a);
-			i++;
-			}
-		}
-	
-	//	WifiNetworkImport answer = Algo1(temp);
-		for(MacImprove a: answers){
-		//	System.out.println(a.getMAC());
-		}
-		return answers;
-	}
+				continue;
+				out.add(a);
+				i++; */
 
-	public static List<MacImprove> SortMacImproveList(List<MacImprove> MacImproveList){
-		if (MacImproveList.size() > 0) {
-			Collections.sort(MacImproveList, new Comparator<MacImprove>() {
-				@Override
-				public int compare(final MacImprove object1, final MacImprove object2) {
-					return ((Integer)((object1.getRSSI()) * (-1))).compareTo(((Integer)((object2.getRSSI() * (-1)))));
-				}
-			});
+	private static WifiNetworkImport Algo1(List<WifiNetworkImport> WifiMacList){
+		WifiNetworkImport answer = new WifiNetworkImport();
+		double sumLat=0, sumLon=0, sumAlt=0;
+		double sumSignal=0;
+		for(WifiNetworkImport a: WifiMacList){
+			sumAlt=+(a.getAltitudeMeters()*(1/(Math.pow(a.getRSSI(), 2))));
+			sumLon=+(a.getCurrentLongitude()*(1/(Math.pow(a.getRSSI(), 2))));                          
+			sumLat=+(a.getCurrentLatitude()*(1/(Math.pow(a.getRSSI(), 2))));   	
+			sumSignal=+(1/(Math.pow(a.getRSSI(), 2)));	
+			answer.setMAC(a.getMAC());
 		}
-		return MacImproveList;
+		System.out.println("sumAlt: "+sumAlt);
+		answer.setAltitudeMeters(sumAlt/sumSignal);
+		answer.setCurrentLongitude(sumLon/sumSignal);
+		answer.setCurrentLatitude(sumLat/sumSignal);
+		answer.setRSSI(0);
+		answer.setFirstSeen(WifiMacList.get(0).getFirstSeen());
+		answer.setSSID("");
+		answer.setChannel(0);
+
+		return answer;
 	}
 
 

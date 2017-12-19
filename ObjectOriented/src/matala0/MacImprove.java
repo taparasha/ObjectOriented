@@ -1,6 +1,8 @@
 package matala0;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MacImprove {
@@ -79,8 +81,43 @@ public class MacImprove {
 		return MacImproveList;
 	}
 
+	public static List<MacImprove> SortMacImproveList(List<MacImprove> MacImproveList){
+		if (MacImproveList.size() > 0) {
+			Collections.sort(MacImproveList, new Comparator<MacImprove>() {
+				@Override
+				public int compare(final MacImprove object1, final MacImprove object2) {
+					return ((Integer)((object1.getRSSI()) * (-1))).compareTo(((Integer)((object2.getRSSI() * (-1)))));
+				}
+			});
+		}
+		return MacImproveList;
+	}
+
+	public static List <MacImprove> OrgenizeMacImproveList(List <MacImprove> MacImproveList){
+		List<MacImprove> temp = new ArrayList<>();
+		List<String> temp2 = new ArrayList<>();
+
+		for(MacImprove a: MacImproveList){
+			if(temp2.contains(a.getMAC()))
+				continue;
+	    	for(MacImprove b: MacImproveList){
+		      if (a.getMAC().equals(b.getMAC())){
+		    	temp.add(a);
+		        temp2.add(a.getMAC());}
+	       	}
+      	}	
+		return temp;
+	}	
 	
+	public static List <MacImprove> ReduceMacImproveList(List <MacImprove> MacImproveList){
+		List<MacImprove> temp = new ArrayList<>();
+		List<String> temp2 = new ArrayList<>();
+		
+		OrgenizeMacImproveList(MacImproveList);
+		
+	//	for(MacImprove a: MacImproveList)
+        		
+	return temp;
 	
-	
-	
+	}
 }
