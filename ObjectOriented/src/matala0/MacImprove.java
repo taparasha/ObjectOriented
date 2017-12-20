@@ -81,6 +81,12 @@ public class MacImprove {
 		return MacImproveList;
 	}
 
+	/**
+	 * this function sort a list of MacImprove by RSSI
+	 * @param MacImproveList
+	 * @return MacImproveList
+	 */
+	
 	public static List<MacImprove> SortMacImproveList(List<MacImprove> MacImproveList){
 		if (MacImproveList.size() > 0) {
 			Collections.sort(MacImproveList, new Comparator<MacImprove>() {
@@ -93,6 +99,11 @@ public class MacImprove {
 		return MacImproveList;
 	}
 
+	/**
+	 * this function take all the Mac addresses and orgenize them to be in list by groups of each Mac addresse 
+	 * @param MacImproveList
+	 * @return MacImproveList
+	 */
 	public static List <MacImprove> OrgenizeMacImproveList(List <MacImprove> MacImproveList){
 		List<MacImprove> temp = new ArrayList<>();
 		List<String> temp2 = new ArrayList<>();
@@ -109,15 +120,67 @@ public class MacImprove {
 		return temp;
 	}	
 	
+	/**
+	 * this function take every group of similar Mac address and reduce the group to Maximum 3 Mac addresses that have the most RSSI value
+	 * @param MacImproveList
+	 * @return MacImproveList
+	 */
 	public static List <MacImprove> ReduceMacImproveList(List <MacImprove> MacImproveList){
 		List<MacImprove> temp = new ArrayList<>();
-		List<String> temp2 = new ArrayList<>();
+		List<MacImprove> temp2 = new ArrayList<>();
+		List<MacImprove> pelet = new ArrayList<>();
+		int i=1;
+		String t="";
+
+		temp=OrgenizeMacImproveList(MacImproveList);
 		
-		OrgenizeMacImproveList(MacImproveList);
-		
-	//	for(MacImprove a: MacImproveList)
-        		
-	return temp;
-	
+		for(MacImprove a: temp){
+			if (a.getMAC().equals(t) && i%3!=0 ){
+				temp2.add(a);	
+				temp2=SortMacImproveList(temp2);
+				t=a.getMAC();
+				i++;
+			}
+			else if (a.getMAC().equals(t) && i%3==0 )
+			continue;
+			
+			else  { 
+				for(MacImprove b: temp2){
+				pelet.add(b);}
+				temp2.clear();
+				temp2.add(a);	
+				t=a.getMAC();
+				i=1;
+			}		
+		}
+		return pelet;
+	}
+
+/**
+ * this function take a list of Mac addresses and create a averaged lat lon and alt from them.
+ * @param WifiMacList
+ * @return
+ */
+	private static WifiNetworkImport Algo1(List<WifiNetworkImport> WifiMacList){
+		WifiNetworkImport answer = new WifiNetworkImport();
+		double sumLat=0, sumLon=0, sumAlt=0;
+		double sumSignal=0;
+		for(WifiNetworkImport a: WifiMacList){
+			sumAlt=+(a.getAltitudeMeters()*(1/(Math.pow(a.getRSSI(), 2))));
+			sumLon=+(a.getCurrentLongitude()*(1/(Math.pow(a.getRSSI(), 2))));                          
+			sumLat=+(a.getCurrentLatitude()*(1/(Math.pow(a.getRSSI(), 2))));   	
+			sumSignal=+(1/(Math.pow(a.getRSSI(), 2)));	
+			answer.setMAC(a.getMAC());
+		}
+		System.out.println("sumAlt: "+sumAlt);
+		answer.setAltitudeMeters(sumAlt/sumSignal);
+		answer.setCurrentLongitude(sumLon/sumSignal);
+		answer.setCurrentLatitude(sumLat/sumSignal);
+		answer.setRSSI(0);
+		answer.setFirstSeen(WifiMacList.get(0).getFirstSeen());
+		answer.setSSID("");
+		answer.setChannel(0);
+
+		return answer;
 	}
 }

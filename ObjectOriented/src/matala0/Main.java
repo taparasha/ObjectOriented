@@ -55,7 +55,7 @@ public class Main {
 
 		List<DataToExport> dataToExportList = DataToExport.buildDataToExportList(wifiNetworkImportList);
 		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
-	//	MacImprove.OrgenizeMacImproveList(MacImproveList);
+		MacImprove.ReduceMacImproveList(MacImproveList);
          
 		
 		for (DataToExport dataToExport : dataToExportList) {
@@ -128,102 +128,6 @@ public class Main {
 	 * מפה קוד של מטלה 2
 	 * @param WifiNetworkImportList
 	 * @return
-	 */
-				
-		/*for(MacImprove a: temp){
-			if(i%4==0)
-				continue;
-				out.add(a);
-				i++; */
-
-	private static WifiNetworkImport Algo1(List<WifiNetworkImport> WifiMacList){
-		WifiNetworkImport answer = new WifiNetworkImport();
-		double sumLat=0, sumLon=0, sumAlt=0;
-		double sumSignal=0;
-		for(WifiNetworkImport a: WifiMacList){
-			sumAlt=+(a.getAltitudeMeters()*(1/(Math.pow(a.getRSSI(), 2))));
-			sumLon=+(a.getCurrentLongitude()*(1/(Math.pow(a.getRSSI(), 2))));                          
-			sumLat=+(a.getCurrentLatitude()*(1/(Math.pow(a.getRSSI(), 2))));   	
-			sumSignal=+(1/(Math.pow(a.getRSSI(), 2)));	
-			answer.setMAC(a.getMAC());
-		}
-		System.out.println("sumAlt: "+sumAlt);
-		answer.setAltitudeMeters(sumAlt/sumSignal);
-		answer.setCurrentLongitude(sumLon/sumSignal);
-		answer.setCurrentLatitude(sumLat/sumSignal);
-		answer.setRSSI(0);
-		answer.setFirstSeen(WifiMacList.get(0).getFirstSeen());
-		answer.setSSID("");
-		answer.setChannel(0);
-
-		return answer;
-	}
-
-
-
-	/*
-	public static List<WifiNetworkImport> createListOfMac(List <WifiNetworkImport> WifiNetworkImportList){
-		List<WifiNetworkImport> temp = new ArrayList<>();
-		for(WifiNetworkImport a: WifiNetworkImportList){
-			temp.add(createMac(WifiNetworkImportList,a.getMAC()));
-		}
-
-		return temp;
-	}
-
-
-	public static WifiNetworkImport createMac(List <WifiNetworkImport> WifiNetworkImportList, String mac){
-		List<WifiNetworkImport> temp = new ArrayList<>();
-		for(WifiNetworkImport a: WifiNetworkImportList){
-				if(a.getMAC().equals(mac)){
-					temp.add(a);
-				//	WifiNetworkImportList.remove(a);
-			}
-		}
-		sortWifiNetwork(temp);
-		List<WifiNetworkImport> answers = new ArrayList<>();
-		/*for(int i=0;i<3;i++){
-			answers.add(temp.get(i));
-		}
-		WifiNetworkImport answer = Algo1(temp);
-		return answer;
-	}
-
-	public static List<WifiNetworkImport> sortWifiNetwork(List<WifiNetworkImport> wifiNetworkImport){
-		if (wifiNetworkImport.size() > 0) {
-			Collections.sort(wifiNetworkImport, new Comparator<WifiNetworkImport>() {
-				@Override
-				public int compare(final WifiNetworkImport object1, final WifiNetworkImport object2) {
-					return ((Integer)((object1.getRSSI()) * (-1))).compareTo(((Integer)((object2.getRSSI() * (-1)))));
-				}
-			});
-		}
-		return wifiNetworkImport;
-	}
-
-	private static WifiNetworkImport Algo1(List<WifiNetworkImport> WifiMacList){
-		WifiNetworkImport answer = new WifiNetworkImport();
-		double sumLat=0, sumLon=0, sumAlt=0;
-		double sumSignal=0;
-		for(WifiNetworkImport a: WifiMacList){
-			sumAlt=+(a.getAltitudeMeters()*(1/(Math.pow(a.getRSSI(), 2))));
-			sumLon=+(a.getCurrentLongitude()*(1/(Math.pow(a.getRSSI(), 2))));                          
-			sumLat=+(a.getCurrentLatitude()*(1/(Math.pow(a.getRSSI(), 2))));   	
-			sumSignal=+(1/(Math.pow(a.getRSSI(), 2)));	
-			answer.setMAC(a.getMAC());
-		}
-		System.out.println("sumAlt: "+sumAlt);
-		answer.setAltitudeMeters(sumAlt/sumSignal);
-		answer.setCurrentLongitude(sumLon/sumSignal);
-		answer.setCurrentLatitude(sumLat/sumSignal);
-		answer.setRSSI(0);
-		answer.setFirstSeen(WifiMacList.get(0).getFirstSeen());
-		answer.setSSID("");
-		answer.setChannel(0);
-
-
-		return answer;
-	}
 	 */
 
 }
