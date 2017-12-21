@@ -91,7 +91,7 @@ public class DataToExportWithPI {
 		}
 		
 		List<DataToExportWithPI> sortSimilPI = new ArrayList<>();
-//		sortSimilPI = sortByPI(SimilPI);
+		sortSimilPI = sortByPI(SimilPI);
 		
 		List<DataToExportWithPI> OnlyThree = new ArrayList<>();
 		for(int i=0;i<3;i++){

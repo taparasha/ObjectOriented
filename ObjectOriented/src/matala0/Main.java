@@ -43,10 +43,10 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 public class Main {
 
 	public static void main(String[] args) {
-
+/*
 		/**
 		 * this code take csv files and put the data into objects of WifiNetworkImport
-		 */
+		 
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
 		List<File> csvFiles = WifiNetworkImport.getFilesListForNetworkImport();
 
@@ -61,7 +61,7 @@ public class Main {
 			List<WifiNetworkExport> sortWifiNetworksBySignal = WifiNetworkExport.sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
-
+*/
 		/**
 		 * this code take csv files and put the data into objects of DataToExport
 		 */
@@ -69,14 +69,14 @@ public class Main {
 		List<DataToExport> DataToExportList = new ArrayList<>();
 		List<File> csvFiles2 = DataToExport.getFilesListForDataToExport();
 
-		for (File file : csvFiles) {
+		for (File file : csvFiles2) {
 			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExport(file);
 			DataToExportList.addAll(convertCsvToDataToExport);
 		}
-		
-	/**
+	
+/*	/**
 	 * this code ask the user befor the build of the kml if he want to filter by radius or time
-	 */
+	 
 		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
 		List<MacImprove> d = new ArrayList<>();
 		List<MacImprove> t = new ArrayList<>();
@@ -85,19 +85,19 @@ public class Main {
 		t=MacImprove.Algo1(d);
 		
 		MacImprove.saveToCsvFile(t);
-		
+		*/
 		List<DataToExport> input = new ArrayList<>();
 		input=DataToExportList;
 		
 		List<DataToExport> algo2 = new ArrayList<>();
-		algo2=DataToExportWithPI.Algo2(input,dataToExportList);
+		algo2=DataToExportWithPI.Algo2(input,DataToExportList);
 		
 		String newCsv = DataToExport.buildCSVData(algo2);
 		KMLandCSVbuild.saveToCsvFile(newCsv);
-		
+	/*
 		/**
 		 * Sort By Coordinates/Time from Client
-		 */
+		 
 
 		Scanner in = new Scanner(System.in);
 
@@ -128,7 +128,7 @@ public class Main {
 		String csvString = DataToExport.buildCSVData(dataToExportList);
 		KMLandCSVbuild.saveToCsvFile(csvString);
 		KMLandCSVbuild.saveTokmlFile(dataToExportList);
-
+*/
 	}
 
 	
