@@ -211,7 +211,11 @@ public class MacImprove {
 	}
 
 
-
+/**
+ * 
+ * @param MacImproveList
+ * 
+ */
 	public static void saveToCsvFile(List<MacImprove> MacImproveList){
 		StringBuilder ret = new StringBuilder();
 		int i=0;
@@ -226,7 +230,11 @@ public class MacImprove {
 		saveToCsv(ret.toString());
 	}
 
-
+/**
+ * 
+ * @param csvString
+ * building string to export to csv file (because the PrintWriter work with string)
+ */
 	private static void saveToCsv(String csvString) {
 		try(  PrintWriter out = new PrintWriter(BASE_PATH + CSV_FILE_NAME)  ){
 			out.println(csvString);
