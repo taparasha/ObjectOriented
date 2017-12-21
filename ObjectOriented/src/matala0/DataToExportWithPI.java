@@ -1,6 +1,8 @@
 package matala0;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -139,4 +141,18 @@ public class DataToExportWithPI {
 		finala.setLon(sumLon/sumWeight);
 		return finala;
 	}
+	
+	public static List<DataToExportWithPI> sortByPI(List<DataToExportWithPI> sortSimilPi){
+		if (sortSimilPi.size() > 0) {
+			Collections.sort(sortSimilPi, new Comparator<DataToExportWithPI>() {
+				@Override
+				public int compare(final DataToExportWithPI object1, final DataToExportWithPI object2) {
+					return ((Integer)(int)((object1.getPI()*1000000))).compareTo(((Integer)(int)((object2.getPI()*1000000))));
+				}
+			});
+		}
+		return sortSimilPi;
+	}
+	
+	
 }

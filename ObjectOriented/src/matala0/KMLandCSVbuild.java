@@ -162,28 +162,4 @@ public class KMLandCSVbuild {
 		}
 
 
-		public static List<File> getFilesList() {
-			Stream<Path> paths = null;
-			List<File> csvFiles = new ArrayList<>();
-			try {
-				paths = Files.walk(Paths.get(BASE_PATH));
-			} catch (IOException e) {
-				System.err.println("Cano't find files in path");
-				e.printStackTrace();
-			}
-
-			Stream<Path> filter = paths.filter(Files::isRegularFile);
-			Stream<File> map = filter.map(Path::toFile);
-			List<File> regularFiles = map.collect(Collectors.toList());
-
-			for (File file : regularFiles) {
-				String fileName = file.getName().toLowerCase();
-
-				if (fileName.endsWith(".csv"))
-				{
-					csvFiles.add(file);
-				}
-			}
-			return csvFiles;
-		}
 }

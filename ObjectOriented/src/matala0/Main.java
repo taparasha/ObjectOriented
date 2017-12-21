@@ -44,9 +44,11 @@ public class Main {
 
 	public static void main(String[] args) {
 
+		/**
+		 * this code take csv files and put the data into objects of WifiNetworkImport
+		 */
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
-
-		List<File> csvFiles = KMLandCSVbuild.getFilesList();
+		List<File> csvFiles = WifiNetworkImport.getFilesListForNetworkImport();
 
 		for (File file : csvFiles) {
 			List<WifiNetworkImport> convertCsvToWifiNetworkImport = WifiNetworkImport.convertCsvToWifiNetworkImport(file);
@@ -56,10 +58,25 @@ public class Main {
 		List<DataToExport> dataToExportList = DataToExport.buildDataToExportList(wifiNetworkImportList);         
 		
 		for (DataToExport dataToExport : dataToExportList) {
-			List<WifiNetworkExport> sortWifiNetworksBySignal = sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
+			List<WifiNetworkExport> sortWifiNetworksBySignal = WifiNetworkExport.sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
 
+		/**
+		 * this code take csv files and put the data into objects of DataToExport
+		 */
+	
+		List<DataToExport> DataToExportList = new ArrayList<>();
+		List<File> csvFiles2 = DataToExport.getFilesListForDataToExport();
+
+		for (File file : csvFiles) {
+			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExport(file);
+			DataToExportList.addAll(convertCsvToDataToExport);
+		}
+		
+	/**
+	 * this code ask the user befor the build of the kml if he want to filter by radius or time
+	 */
 		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
 		List<MacImprove> d = new ArrayList<>();
 		List<MacImprove> t = new ArrayList<>();
@@ -67,13 +84,16 @@ public class Main {
 		d=MacImprove.ReduceMacImproveList(MacImproveList);
 		t=MacImprove.Algo1(d);
 		
-		for(MacImprove a:t){
-			System.out.println(a.getCurrentLatitude());
-		}
-		
 		MacImprove.saveToCsvFile(t);
 		
+		List<DataToExport> input = new ArrayList<>();
+		input=DataToExportList;
 		
+		List<DataToExport> algo2 = new ArrayList<>();
+		algo2=DataToExportWithPI.Algo2(input,dataToExportList);
+		
+		String newCsv = DataToExport.buildCSVData(algo2);
+		KMLandCSVbuild.saveToCsvFile(newCsv);
 		
 		/**
 		 * Sort By Coordinates/Time from Client
@@ -112,23 +132,5 @@ public class Main {
 	}
 
 	
-	/**
-	 * sortBySignal
-	 * the function take the wifiNetworkExport and sort it by signal.
-	 * at the writing, the program will write only the first 10
-	 * 
-	 * https://stackoverflow.com/questions/8432581/how-to-sort-a-listobject-alphabetically-using-object-name-field
-	 */
 
-	public static List<WifiNetworkExport> sortWifiNetworksBySignal(List<WifiNetworkExport> wifiNetworkExport){
-		if (wifiNetworkExport.size() > 0) {
-			Collections.sort(wifiNetworkExport, new Comparator<WifiNetworkExport>() {
-				@Override
-				public int compare(final WifiNetworkExport object1, final WifiNetworkExport object2) {
-					return ((Integer)((object1.getSignal()) * (-1))).compareTo(((Integer)((object2.getSignal() * (-1)))));
-				}
-			});
-		}
-		return wifiNetworkExport;
-	}
 }
