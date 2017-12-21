@@ -223,11 +223,11 @@ public class MacImprove {
 			ret.append(a.getAltitudeMeters()+"\n");
 			i++;
 		}
-		saveToCsvFile(ret.toString());
+		saveToCsv(ret.toString());
 	}
 
 
-	public static void saveToCsvFile(String csvString) {
+	private static void saveToCsv(String csvString) {
 		try(  PrintWriter out = new PrintWriter(BASE_PATH + CSV_FILE_NAME)  ){
 			out.println(csvString);
 		} catch (FileNotFoundException e) {
