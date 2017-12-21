@@ -1,5 +1,7 @@
 package matala0;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,17 +9,19 @@ import java.util.List;
 
 public class MacImprove {
 
-/** 
- * this class was created in order of taking 3 mac points and improve them to an averaged new point  	
- */
-	
-	
+	/** 
+	 * this class was created in order of taking 3 mac points and improve them to an averaged new point  	
+	 */
+	public static String BASE_PATH = "C:\\tmp";
+	public static String CSV_FILE_NAME = "\\exportMacImprove.csv";
+	public static final String SEPERATOR = ",";
+
 	private double currentLatitude;
 	private double currentLongitude;
 	private double altitudeMeters;
 	private String MAC;
 	private int RSSI;
-	
+
 	public double getCurrentLatitude() {
 		return currentLatitude;
 	}
@@ -54,7 +58,7 @@ public class MacImprove {
 	 * @param wifiNetworkImport
 	 * @return MacImprove object
 	 */
-	
+
 	public static MacImprove buildMacImprove(WifiNetworkImport wifiNetworkImport) {
 		MacImprove MacImprove = new MacImprove();
 		MacImprove.setAltitudeMeters(wifiNetworkImport.getAltitudeMeters());
@@ -62,7 +66,7 @@ public class MacImprove {
 		MacImprove.setMAC(wifiNetworkImport.getMAC());
 		MacImprove.setCurrentLatitude(wifiNetworkImport.getCurrentLatitude());
 		MacImprove.setCurrentLongitude(wifiNetworkImport.getCurrentLongitude());		
-		
+
 		return MacImprove;
 	}
 
@@ -71,13 +75,13 @@ public class MacImprove {
 	 * @param wifiNetworkImportList
 	 * @return
 	 */
-	
+
 	public static List<MacImprove> buildMacImproveList(List<WifiNetworkImport> wifiNetworkImportList) {
 		List<MacImprove> MacImproveList = new ArrayList<>();
 		for (WifiNetworkImport wifiNetworkImport : wifiNetworkImportList) {
 			MacImprove MacImprove = buildMacImprove(wifiNetworkImport);
 			MacImproveList.add(MacImprove);
-			}
+		}
 		return MacImproveList;
 	}
 
@@ -86,7 +90,7 @@ public class MacImprove {
 	 * @param MacImproveList
 	 * @return MacImproveList
 	 */
-	
+
 	public static List<MacImprove> SortMacImproveList(List<MacImprove> MacImproveList){
 		if (MacImproveList.size() > 0) {
 			Collections.sort(MacImproveList, new Comparator<MacImprove>() {
@@ -111,15 +115,15 @@ public class MacImprove {
 		for(MacImprove a: MacImproveList){
 			if(temp2.contains(a.getMAC()))
 				continue;
-	    	for(MacImprove b: MacImproveList){
-		      if (a.getMAC().equals(b.getMAC())){
-		    	temp.add(a);
-		        temp2.add(a.getMAC());}
-	       	}
-      	}	
+			for(MacImprove b: MacImproveList){
+				if (a.getMAC().equals(b.getMAC())){
+					temp.add(a);
+					temp2.add(a.getMAC());}
+			}
+		}	
 		return temp;
 	}	
-	
+
 	/**
 	 * this function take every group of similar Mac address and reduce the group to Maximum 3 Mac addresses that have the most RSSI value
 	 * @param MacImproveList
@@ -133,7 +137,7 @@ public class MacImprove {
 		String t="";
 
 		temp=OrgenizeMacImproveList(MacImproveList);
-		
+
 		for(MacImprove a: temp){
 			if (a.getMAC().equals(t) && i%3!=0 ){
 				temp2.add(a);	
@@ -142,45 +146,84 @@ public class MacImprove {
 				i++;
 			}
 			else if (a.getMAC().equals(t) && i%3==0 )
-			continue;
-			
+				continue;
+
 			else  { 
 				for(MacImprove b: temp2){
-				pelet.add(b);}
+					pelet.add(b);}
 				temp2.clear();
 				temp2.add(a);	
 				t=a.getMAC();
 				i=1;
-			}		
-		}
+			}					
+		}			
 		return pelet;
 	}
 
-/**
- * this function take a list of Mac addresses and create a averaged lat lon and alt from them.
- * @param WifiMacList
- * @return
- */
-	private static WifiNetworkImport Algo1(List<WifiNetworkImport> WifiMacList){
-		WifiNetworkImport answer = new WifiNetworkImport();
-		double sumLat=0, sumLon=0, sumAlt=0;
-		double sumSignal=0;
-		for(WifiNetworkImport a: WifiMacList){
-			sumAlt=+(a.getAltitudeMeters()*(1/(Math.pow(a.getRSSI(), 2))));
-			sumLon=+(a.getCurrentLongitude()*(1/(Math.pow(a.getRSSI(), 2))));                          
-			sumLat=+(a.getCurrentLatitude()*(1/(Math.pow(a.getRSSI(), 2))));   	
-			sumSignal=+(1/(Math.pow(a.getRSSI(), 2)));	
-			answer.setMAC(a.getMAC());
-		}
-		System.out.println("sumAlt: "+sumAlt);
-		answer.setAltitudeMeters(sumAlt/sumSignal);
-		answer.setCurrentLongitude(sumLon/sumSignal);
-		answer.setCurrentLatitude(sumLat/sumSignal);
-		answer.setRSSI(0);
-		answer.setFirstSeen(WifiMacList.get(0).getFirstSeen());
-		answer.setSSID("");
-		answer.setChannel(0);
+	public static List<MacImprove> Algo1 (List<MacImprove> MacImproveList){
+		List<MacImprove> ready = new ArrayList<>();
+		List<String> ready2 = new ArrayList<>();
+		List<MacImprove> answer = new ArrayList<>();
 
+		for(MacImprove a: MacImproveList){
+			if(ready2.contains(a.getMAC())){
+				ready.add(a);
+				ready2.add(a.getMAC());
+				}
+			else{
+				answer.add(calc(ready));
+				ready.clear();
+				ready2.clear();
+				ready.add(a);
+				ready2.add(a.getMAC());
+			}
+		}
+		answer.add(calc(ready));
+		
 		return answer;
+	}				
+
+
+	/**
+	 * this function take a list of Mac addresses and create a averaged lat lon and alt from them.
+	 * @param WifiMacList
+	 * @return
+	 */
+	public static MacImprove calc(List<MacImprove> MacImproveList){
+		MacImprove finala = new MacImprove();
+		double sumLat=0, sumLon=0, sumAlt=0;
+		double sumWeight=0;
+
+		for(MacImprove a: MacImproveList){
+			int signal=a.getRSSI();
+			double weigth=1/Math.pow(signal, 2);
+			
+			sumAlt=+(a.getAltitudeMeters()*weigth);
+			sumLon=+(a.getCurrentLongitude()*weigth);                          
+			sumLat=+(a.getCurrentLatitude()*weigth);   	
+			sumWeight=+weigth;
+			finala.setMAC(a.getMAC());
+		}
+		finala.setAltitudeMeters(sumAlt/sumWeight);
+		finala.setCurrentLatitude(sumLat/sumWeight);
+		finala.setCurrentLongitude(sumLon/sumWeight);
+		return finala;
 	}
+	
+	
+	
+/*	public static String (List<MacImprove> MacImproveList){
+		
+	}*/
+	
+	
+	public static void saveToCsvFile(String csvString) {
+		try(  PrintWriter out = new PrintWriter(BASE_PATH + CSV_FILE_NAME)  ){
+			out.println(csvString);
+		} catch (FileNotFoundException e) {
+			System.out.println("Failed to save CSV file");
+			e.printStackTrace();
+		}
+	}
+
 }

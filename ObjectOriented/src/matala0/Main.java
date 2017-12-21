@@ -53,16 +53,26 @@ public class Main {
 			wifiNetworkImportList.addAll(convertCsvToWifiNetworkImport);
 		}
 
-		List<DataToExport> dataToExportList = DataToExport.buildDataToExportList(wifiNetworkImportList);
-		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
-		MacImprove.ReduceMacImproveList(MacImproveList);
-         
+		List<DataToExport> dataToExportList = DataToExport.buildDataToExportList(wifiNetworkImportList);         
 		
 		for (DataToExport dataToExport : dataToExportList) {
 			List<WifiNetworkExport> sortWifiNetworksBySignal = sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
 
+		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
+		List<MacImprove> d = new ArrayList<>();
+		List<MacImprove> t = new ArrayList<>();
+		
+		d=MacImprove.ReduceMacImproveList(MacImproveList);
+		t=MacImprove.Algo1(d);
+		
+		for(MacImprove a:t){
+			System.out.println(a.getCurrentLatitude());
+		}
+		
+//		MacImprove.saveToCsvFile(t);
+		
 		/**
 		 * Sort By Coordinates/Time from Client
 		 */
@@ -97,13 +107,9 @@ public class Main {
 		KMLandCSVbuild.saveToCsvFile(csvString);
 		KMLandCSVbuild.saveTokmlFile(dataToExportList);
 
-		//	List<WifiNetworkImport> matala2A = createListOfMac(wifiNetworkImportList);
-		//	List<DataToExport> dataToExportList2A = DataToExport.buildDataToExportList(matala2A);
-		//	String csvString2A = DataToExport.buildCSVData(dataToExportList2A);
-		//	KMLandCSVbuild.saveToCsvFile(csvString2A);
-		//	KMLandCSVbuild.saveTokmlFile(dataToExportList2A);
 	}
 
+	
 	/**
 	 * sortBySignal
 	 * the function take the wifiNetworkExport and sort it by signal.
@@ -123,11 +129,4 @@ public class Main {
 		}
 		return wifiNetworkExport;
 	}
-
-	/**
-	 * מפה קוד של מטלה 2
-	 * @param WifiNetworkImportList
-	 * @return
-	 */
-
 }
