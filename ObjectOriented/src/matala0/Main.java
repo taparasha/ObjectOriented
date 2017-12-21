@@ -71,7 +71,7 @@ public class Main {
 			System.out.println(a.getCurrentLatitude());
 		}
 		
-//		MacImprove.saveToCsvFile(t);
+		MacImprove.saveToCsvFile(t);
 		
 		/**
 		 * Sort By Coordinates/Time from Client

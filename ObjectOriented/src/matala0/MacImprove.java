@@ -169,7 +169,7 @@ public class MacImprove {
 			if(ready2.contains(a.getMAC())){
 				ready.add(a);
 				ready2.add(a.getMAC());
-				}
+			}
 			else{
 				answer.add(calc(ready));
 				ready.clear();
@@ -179,7 +179,7 @@ public class MacImprove {
 			}
 		}
 		answer.add(calc(ready));
-		
+
 		return answer;
 	}				
 
@@ -197,7 +197,7 @@ public class MacImprove {
 		for(MacImprove a: MacImproveList){
 			int signal=a.getRSSI();
 			double weigth=1/Math.pow(signal, 2);
-			
+
 			sumAlt=+(a.getAltitudeMeters()*weigth);
 			sumLon=+(a.getCurrentLongitude()*weigth);                          
 			sumLat=+(a.getCurrentLatitude()*weigth);   	
@@ -209,14 +209,24 @@ public class MacImprove {
 		finala.setCurrentLongitude(sumLon/sumWeight);
 		return finala;
 	}
-	
-	
-	
-/*	public static String (List<MacImprove> MacImproveList){
-		
-	}*/
-	
-	
+
+
+
+	public static void saveToCsvFile(List<MacImprove> MacImproveList){
+		StringBuilder ret = new StringBuilder();
+		int i=0;
+		for(MacImprove a: MacImproveList){
+			ret.append(i+SEPERATOR);
+			ret.append(a.getMAC()+SEPERATOR);
+			ret.append(a.getCurrentLatitude()+SEPERATOR);
+			ret.append(a.getCurrentLongitude()+SEPERATOR);
+			ret.append(a.getAltitudeMeters()+"\n");
+			i++;
+		}
+		saveToCsvFile(ret.toString());
+	}
+
+
 	public static void saveToCsvFile(String csvString) {
 		try(  PrintWriter out = new PrintWriter(BASE_PATH + CSV_FILE_NAME)  ){
 			out.println(csvString);
