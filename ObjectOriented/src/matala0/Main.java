@@ -43,10 +43,11 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 public class Main {
 
 	public static void main(String[] args) {
-/*
+
 		/**
-		 * this code take csv files and put the data into objects of WifiNetworkImport
-		 
+		 * this code take csv files and put the data into objects of WifiNetworkImport (for matala 1)
+		**/
+		
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
 		List<File> csvFiles = WifiNetworkImport.getFilesListForNetworkImport();
 
@@ -61,10 +62,18 @@ public class Main {
 			List<WifiNetworkExport> sortWifiNetworksBySignal = WifiNetworkExport.sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
-*/
+		
+		List<DataToExport> a= new ArrayList<>();
+		a=DataToExport.SortByUser(dataToExportList);
+		
+		String csvString = DataToExport.buildCSVData(dataToExportList);		
+		KMLandCSVbuild.saveToCsvFile(csvString);
+		KMLandCSVbuild.saveTokmlFile(dataToExportList);
+
+
 		/**
-		 * this code take csv files and put the data into objects of DataToExport
-		 */
+		 * this code take csv files and put the data into objects of DataToExport (for matala 2)
+		 **/
 	
 		List<DataToExport> DataToExportList = new ArrayList<>();
 		List<File> csvFiles2 = DataToExport.getFilesListForDataToExport();
@@ -73,19 +82,17 @@ public class Main {
 			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExport(file);
 			DataToExportList.addAll(convertCsvToDataToExport);
 		}
-	
-/*	/**
-	 * this code ask the user befor the build of the kml if he want to filter by radius or time
-	 
+
+		
 		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
 		List<MacImprove> d = new ArrayList<>();
 		List<MacImprove> t = new ArrayList<>();
 		
 		d=MacImprove.ReduceMacImproveList(MacImproveList);
-		t=MacImprove.Algo1(d);
+	    t=MacImprove.Algo1(d);
 		
 		MacImprove.saveToCsvFile(t);
-		*/
+		
 		List<DataToExport> input = new ArrayList<>();
 		input=DataToExportList;
 		
@@ -93,44 +100,7 @@ public class Main {
 		algo2=DataToExportWithPI.Algo2(input,DataToExportList);
 		
 		String newCsv = DataToExport.buildCSVData(algo2);
-		KMLandCSVbuild.saveToCsvFile(newCsv);
-	/*
-		/**
-		 * Sort By Coordinates/Time from Client
-		 
+		KMLandCSVbuild.saveToCsvFile2(newCsv);
 
-		Scanner in = new Scanner(System.in);
-
-		System.out.println("Enter what category you want to sort by (1=coordinate, 2=time):\n");
-		int category = in.nextInt();
-
-		if (category==1){
-			System.out.println("Enter Lat:\n");
-			double lat = in.nextDouble();
-			System.out.println("Enter Lon:\n");
-			double lon = in.nextDouble();
-			System.out.println("Enter Radius:\n");
-			double radius = in.nextDouble();
-
-			List<DataToExport> sortListByC = DataToExport.SortListByC(dataToExportList, lat, lon, radius);
-			dataToExportList = sortListByC;
-		}
-
-		if(category==2){
-			System.out.println("Enter Time in format as the follow:(YYYY-MM-DD HH-MM-SS):\n");
-			System.out.println(dataToExportList.get(0).getTime().toString()+"\n");
-			String time = in.next();
-
-			List<DataToExport> sortListByT = DataToExport.SortListByT(dataToExportList, time);
-			dataToExportList = sortListByT;
-		}
-
-		String csvString = DataToExport.buildCSVData(dataToExportList);
-		KMLandCSVbuild.saveToCsvFile(csvString);
-		KMLandCSVbuild.saveTokmlFile(dataToExportList);
-*/
 	}
-
-	
-
 }

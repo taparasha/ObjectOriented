@@ -12,7 +12,8 @@ public class MacImprove {
 	/** 
 	 * this class was created in order of taking 3 mac points and improve them to an averaged new point  	
 	 */
-	public static String BASE_PATH = "C:\\tmp";
+	public static String BASE_PATH1 = "C:\\matala1";
+	public static String BASE_PATH2 = "C:\\matala2";
 	public static String CSV_FILE_NAME = "\\exportMacImprove.csv";
 	public static final String SEPERATOR = ",";
 
@@ -236,7 +237,7 @@ public class MacImprove {
  * building string to export to csv file (because the PrintWriter work with string)
  */
 	private static void saveToCsv(String csvString) {
-		try(  PrintWriter out = new PrintWriter(BASE_PATH + CSV_FILE_NAME)  ){
+		try(  PrintWriter out = new PrintWriter(BASE_PATH2 + CSV_FILE_NAME)  ){
 			out.println(csvString);
 		} catch (FileNotFoundException e) {
 			System.out.println("Failed to save CSV file");

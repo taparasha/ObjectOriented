@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,7 +23,9 @@ import java.util.stream.Stream;
  */
 public class DataToExport {
 
-	public static String BASE_PATH = "C:\\tmp";
+	public static String BASE_PATH1 = "C:\\matala1";
+	public static String BASE_PATH2 = "C:\\matala2";
+
 	public static String CSV_FILE_NAME = "\\exportData.csv";
 	public static String KML_FILE_NAME = "\\exportData.kml";
 	public static final String SEPERATOR = ",";
@@ -34,7 +37,7 @@ public class DataToExport {
 	private double lon;
 	private double alt;
 	private List<WifiNetworkExport> wifiNetworks = new ArrayList<>();
-	
+
 	public long getId() {
 		return id;
 	}
@@ -71,7 +74,7 @@ public class DataToExport {
 	public void setWifiNetworks(List<WifiNetworkExport> wifiNetworks) {
 		this.wifiNetworks = wifiNetworks;
 	}
-	
+
 	/**
 	 * 
 	 * @param wifiNetworkImportList
@@ -98,7 +101,7 @@ public class DataToExport {
 		}
 		return dataToExportList;
 	}
-	
+
 	/**
 	 * @description make DataToExport object with 6 units. the sixth field is a list of WifiNetworkExport objects
 	 */
@@ -113,7 +116,7 @@ public class DataToExport {
 		dataToExport.getWifiNetworks().add(wifiNetworkExport);
 		return dataToExport;
 	}
-	
+
 	public static String getRowFromDataToExport(DataToExport dataToExport) {
 		StringBuilder row = new StringBuilder();
 		row.append(dataToExport.getTime()).append(SEPERATOR);
@@ -151,7 +154,7 @@ public class DataToExport {
 		String csvString = csvStringBuilder.toString();
 		return csvString;
 	}
-		
+
 	public static StringBuilder buildHeadRow() {
 		StringBuilder headRow = new StringBuilder();
 		headRow.append("Time").append(SEPERATOR);
@@ -180,17 +183,17 @@ public class DataToExport {
 	 * @return the distance between
 	 */
 	private static double distance(double lat1, double lng1, double lat2, double lng2) {
-	    double earthRadius = 6371000; //meters
-	    double dLat = Math.toRadians(lat2-lat1);
-	    double dLng = Math.toRadians(lng2-lng1);
-	    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-	               Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-	               Math.sin(dLng/2) * Math.sin(dLng/2);
-	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	    double dist = (float) (earthRadius * c);
+		double earthRadius = 6371000; //meters
+		double dLat = Math.toRadians(lat2-lat1);
+		double dLng = Math.toRadians(lng2-lng1);
+		double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+				Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+				Math.sin(dLng/2) * Math.sin(dLng/2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		double dist = (float) (earthRadius * c);
 
-	    return dist;
-	    }
+		return dist;
+	}
 	/**
 	 * 
 	 * @param dataToExportList
@@ -214,9 +217,9 @@ public class DataToExport {
 	 * @param time
 	 * @return DataToExport list sorted by time
 	 */
-	
+
 	public static List<DataToExport> SortListByT(List<DataToExport> dataToExportList, String time){
-		
+
 		List<DataToExport> sortList = new ArrayList<>();
 		for(DataToExport a : dataToExportList){
 			if(a.getTime().toString().equals(time)){
@@ -225,7 +228,7 @@ public class DataToExport {
 		}
 		return sortList;
 	}
-	
+
 	public static List<DataToExport> convertCsvToDataToExport(File file){
 		List<DataToExport> DataToExportList = new ArrayList<>();
 		int j = 7;
@@ -233,17 +236,17 @@ public class DataToExport {
 		int i = 1;
 
 		BufferedReader br = null;
-	
+
 		try {
 			br = new BufferedReader(new FileReader(file));
 			String line;
 
 			while ((line = br.readLine()) != null) {
-		//		System.out.println("Line: " + i++ + ") " + line);
-				
+				//		System.out.println("Line: " + i++ + ") " + line);
+
 				DataToExport dataToExport = new DataToExport();
 				String[] entries = line.split(",");
-				
+
 				for(WifiNetworkExport a: dataToExport.wifiNetworks){
 					a.setMAC(entries[j]);
 					j=j+4;
@@ -270,12 +273,12 @@ public class DataToExport {
 
 		return DataToExportList;
 	}
-	
+
 	public static List<File> getFilesListForDataToExport() {
 		Stream<Path> paths = null;
 		List<File> csvFiles = new ArrayList<>();
 		try {
-			paths = Files.walk(Paths.get(BASE_PATH));
+			paths = Files.walk(Paths.get(BASE_PATH2));
 		} catch (IOException e) {
 			System.err.println("Cano't find files in path");
 			e.printStackTrace();
@@ -295,6 +298,41 @@ public class DataToExport {
 		}
 		return csvFiles;
 	}
-	
-	
+
+	/**
+	 * this function let the user option to sort the csv and kml markplaces by time or by radius
+	 **/
+
+
+	public static List<DataToExport> SortByUser(List<DataToExport> dataToExportList ){
+
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter what category you want to sort by (1=coordinate, 2=time):\n");
+		int category = in.nextInt();
+
+		if (category==1){
+			System.out.println("Enter Lat:\n");
+			double lat = in.nextDouble();
+			System.out.println("Enter Lon:\n");
+			double lon = in.nextDouble();
+			System.out.println("Enter Radius:\n");
+			double radius = in.nextDouble();
+
+			List<DataToExport> sortListByC = DataToExport.SortListByC(dataToExportList, lat, lon, radius);
+			dataToExportList = sortListByC;
+		}
+
+		if(category==2){
+			System.out.println("Enter Time in format as the follow:(YYYY-MM-DD HH-MM-SS):\n");
+			System.out.println(dataToExportList.get(0).getTime().toString()+"\n");
+			String time = in.next();
+
+			List<DataToExport> sortListByT = DataToExport.SortListByT(dataToExportList, time);
+			dataToExportList = sortListByT;
+		}
+
+	return dataToExportList;
+	}
+
+
 }
