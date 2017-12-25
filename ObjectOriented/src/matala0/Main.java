@@ -35,7 +35,7 @@ import de.micromata.opengis.kml.v_2_2_0.TimeSpan;
 import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 
 /**
- * 
+ *
  * @author OriMol, TaParasha, YoavHenig
  * @category main
  */
@@ -86,12 +86,12 @@ public class Main {
 		
 		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
 		List<MacImprove> d = new ArrayList<>();
-		List<MacImprove> t = new ArrayList<>();
+		List<MacImprove> r = new ArrayList<>();
 		
 		d=MacImprove.ReduceMacImproveList(MacImproveList);
-	    t=MacImprove.Algo1(d);
+	    r=MacImprove.Algo1(d);
 		
-		MacImprove.saveToCsvFile(t);
+		MacImprove.saveToCsvFile(r);
 		
 		List<DataToExport> input = new ArrayList<>();
 		input=DataToExportList;
