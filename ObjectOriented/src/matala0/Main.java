@@ -92,7 +92,6 @@ public class Main {
 	    r=MacImprove.Algo1(d);
 		
 		MacImprove.saveToCsvFile(r);
-		
 		List<DataToExport> input = new ArrayList<>();
 		input=DataToExportList;
 		
