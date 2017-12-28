@@ -12,8 +12,8 @@ public class MacImprove {
 	/** 
 	 * this class was created in order of taking 3 mac points and improve them to an averaged new point  	
 	 */
-	public static String BASE_PATH1 = "C:\\matala1";
-	public static String BASE_PATH2 = "C:\\matala2";
+	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
+	public static String BASE_PATH2 = "C:\\objectoriented\\algo1";
 	public static String CSV_FILE_NAME = "\\exportMacImprove.csv";
 	public static final String SEPERATOR = ",";
 

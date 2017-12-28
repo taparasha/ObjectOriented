@@ -23,9 +23,8 @@ import java.util.stream.Stream;
  */
 public class DataToExport {
 
-	public static String BASE_PATH1 = "C:\\matala1";
-	public static String BASE_PATH2 = "C:\\matala2";
-
+	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
+	public static String BASE_PATH2 = "C:\\objectoriented\\algo1";
 	public static String CSV_FILE_NAME = "\\exportData.csv";
 	public static String KML_FILE_NAME = "\\exportData.kml";
 	public static final String SEPERATOR = ",";
@@ -231,8 +230,6 @@ public class DataToExport {
 
 	public static List<DataToExport> convertCsvToDataToExport(File file){
 		List<DataToExport> DataToExportList = new ArrayList<>();
-		int j = 7;
-		int k= 9;
 		int i = 1;
 
 		BufferedReader br = null;
@@ -242,16 +239,20 @@ public class DataToExport {
 			String line;
 
 			while ((line = br.readLine()) != null) {
-				//		System.out.println("Line: " + i++ + ") " + line);
+	//		System.out.println("Line: " + i++ + ") " + line);
 
 				DataToExport dataToExport = new DataToExport();
 				String[] entries = line.split(",");
 
-				for(WifiNetworkExport a: dataToExport.wifiNetworks){
-					a.setMAC(entries[j]);
-					j=j+4;
-					a.setSignal(Integer.parseInt(entries[k]));
-					k=k+4;
+
+				for(int q=6;q<=43;q=+4){
+					WifiNetworkExport temp = new WifiNetworkExport();
+				//	temp.setSignal(Integer.parseInt(entries[q+3]));
+					temp.setMAC(entries[q+1]);
+					temp.setSSID(entries[q]);
+				//	temp.setFreuncy(Integer.parseInt(entries[q+2]));
+					
+					dataToExport.getWifiNetworks().add(temp);
 				}
 
 				if (dataToExport != null){
@@ -274,11 +275,11 @@ public class DataToExport {
 		return DataToExportList;
 	}
 
-	public static List<File> getFilesListForDataToExport() {
+	public static List<File> getFilesListForDataToExport(String BASE_PATH) {
 		Stream<Path> paths = null;
 		List<File> csvFiles = new ArrayList<>();
 		try {
-			paths = Files.walk(Paths.get(BASE_PATH2));
+			paths = Files.walk(Paths.get(BASE_PATH));
 		} catch (IOException e) {
 			System.err.println("Cano't find files in path");
 			e.printStackTrace();

@@ -87,6 +87,7 @@ public class DataToExportWithPI {
 			temp.setWifiNetworks(b.getWifiNetworks());
 			
 			temp.setPI(createPI(a.getWifiNetworks(),b.getWifiNetworks()));
+			//System.out.println("PI: "+temp.PI);
 			SimilPI.add(temp);
 		}
 		
@@ -107,18 +108,25 @@ public class DataToExportWithPI {
 	
 	public static double createPI(List<WifiNetworkExport> input, List<WifiNetworkExport> combo){
 		double inputSig, dataSig, diff, sigDiff=0.4;
-		int i=0, norm=10000;
+		int i=1, norm=10000;
 		double weight=1;
+		
+		for(WifiNetworkExport a: input){
+			System.out.println(a.getMAC());}
+
 		
 		for(WifiNetworkExport a: input){
 			if(a.getSignal()==0)
 			{inputSig=(-120);}
+//			System.out.println(a.getMAC());
 			
 			inputSig=a.getSignal();
 			dataSig=combo.get(i).getSignal();
 			diff=inputSig-dataSig;
 			weight=weight*(norm/(Math.pow(diff, sigDiff)*Math.pow(inputSig, 2)));
+//			System.out.println("weight= "+weight);
 			i++;
+			break;
 		}
 		return weight;
 	}

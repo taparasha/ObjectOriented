@@ -23,8 +23,8 @@ import java.util.stream.Stream;
  */
 public class WifiNetworkImport {
 	
-	public static String BASE_PATH1 = "C:\\matala1";
-	public static String BASE_PATH2 = "C:\\matala2";
+	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
+	public static String BASE_PATH2 = "C:\\objectoriented\\algo1";
 	public static String CSV_FILE_NAME = "\\exportData.csv";
 	public static String KML_FILE_NAME = "\\exportData.kml";
 	public static final String SEPERATOR = ",";
@@ -126,7 +126,7 @@ public class WifiNetworkImport {
 
 
 			while ((line = br.readLine()) != null) {
-				System.out.println("Line: " + i++ + ") " + line);
+		//		System.out.println("Line: " + i++ + ") " + line);
 				WifiNetworkImport wifiNetworkImport = new WifiNetworkImport();
 				String[] entries = line.split(",");
 				wifiNetworkImport.setMAC(entries[0]);

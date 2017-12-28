@@ -33,8 +33,9 @@ import de.micromata.opengis.kml.v_2_2_0.StyleSelector;
  */
 public class KMLandCSVbuild {
 
-	public static String BASE_PATH1 = "C:\\matala1";
-	public static String BASE_PATH2 = "C:\\matala2";
+	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
+	public static String BASE_PATH2 = "C:\\objectoriented\\algo1";
+	public static String BASE_PATH3 = "C:\\objectoriented\\algo2input";
 	public static String CSV_FILE_NAME = "\\exportData.csv";
 	public static String KML_FILE_NAME = "\\exportData.kml";
 	public static final String SEPERATOR = ",";
@@ -155,7 +156,7 @@ public class KMLandCSVbuild {
 		}
 
 		public static void saveToCsvFile2(String csvString) {
-			try(  PrintWriter out = new PrintWriter(BASE_PATH2 + CSV_FILE_NAME)  ){
+			try(  PrintWriter out = new PrintWriter(BASE_PATH3 + CSV_FILE_NAME)  ){
 				out.println(csvString);
 			} catch (FileNotFoundException e) {
 				System.out.println("Failed to save CSV file");

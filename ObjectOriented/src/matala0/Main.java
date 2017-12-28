@@ -41,7 +41,8 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
  */
 
 public class Main {
-
+	public static String BASE_PATH3 = "C:\\objectoriented\\algo2input";
+	public static String BASE_PATH4 = "C:\\objectoriented\\algo2comb";
 	public static void main(String[] args) {
 
 		/**
@@ -75,13 +76,25 @@ public class Main {
 		 * this code take csv files and put the data into objects of DataToExport (for matala 2)
 		 **/
 	
-		List<DataToExport> DataToExportList = new ArrayList<>();
-		List<File> csvFiles2 = DataToExport.getFilesListForDataToExport();
+		List<DataToExport> comb = new ArrayList<>();
+		List<DataToExport> input = new ArrayList<>();
+		
+		List<File> csvFiles3 = DataToExport.getFilesListForDataToExport(BASE_PATH3);
+//		List<File> csvFiles4 = DataToExport.getFilesListForDataToExport(BASE_PATH4);
 
-		for (File file : csvFiles2) {
+		for (File file : csvFiles3) {
 			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExport(file);
-			DataToExportList.addAll(convertCsvToDataToExport);
+			input.addAll(convertCsvToDataToExport);
+			
+		//	for (DataToExport z: input){
+		//		System.out.println("mac: "+z.getAlt());
+		//	}
 		}
+		
+//		for (File file : csvFiles4) {
+	//		List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExport(file);
+		//	comb.addAll(convertCsvToDataToExport);
+		//}
 
 		
 		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
@@ -92,11 +105,11 @@ public class Main {
 	    r=MacImprove.Algo1(d);
 		
 		MacImprove.saveToCsvFile(r);
-		List<DataToExport> input = new ArrayList<>();
-		input=DataToExportList;
+		
+		comb=dataToExportList;
 		
 		List<DataToExport> algo2 = new ArrayList<>();
-		algo2=DataToExportWithPI.Algo2(input,DataToExportList);
+		algo2=DataToExportWithPI.Algo2(comb,input);
 		
 		String newCsv = DataToExport.buildCSVData(algo2);
 		KMLandCSVbuild.saveToCsvFile2(newCsv);
