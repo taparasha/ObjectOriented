@@ -12,8 +12,9 @@ public class MacImprove {
 	/** 
 	 * this class was created in order of taking 3 mac points and improve them to an averaged new point  	
 	 */
-	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
-	public static String BASE_PATH2 = "C:\\objectoriented\\algo1";
+//	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
+//	public static String BASE_PATH2 = "C:\\objectoriented\\algo1";
+	public static String EXPORT_PATH = "C:\\objectoriented\\export";
 	public static String CSV_FILE_NAME = "\\exportMacImprove.csv";
 	public static final String SEPERATOR = ",";
 
@@ -106,17 +107,17 @@ public class MacImprove {
 
 	/**
 	 * this function take all the Mac addresses and orgenize them to be in list by groups of each Mac addresse 
-	 * @param MacImproveList
+	 * @param macImproveList
 	 * @return MacImproveList
 	 */
-	public static List <MacImprove> OrgenizeMacImproveList(List <MacImprove> MacImproveList){
+	public static List <MacImprove> OrgenizeMacImproveList(List <MacImprove> macImproveList){
 		List<MacImprove> temp = new ArrayList<>();
 		List<String> temp2 = new ArrayList<>();
 
-		for(MacImprove a: MacImproveList){
+		for(MacImprove a: macImproveList){
 			if(temp2.contains(a.getMAC()))
 				continue;
-			for(MacImprove b: MacImproveList){
+			for(MacImprove b: macImproveList){
 				if (a.getMAC().equals(b.getMAC())){
 					temp.add(a);
 					temp2.add(a.getMAC());}
@@ -127,17 +128,17 @@ public class MacImprove {
 
 	/**
 	 * this function take every group of similar Mac address and reduce the group to Maximum 3 Mac addresses that have the most RSSI value
-	 * @param MacImproveList
+	 * @param macImproveList
 	 * @return MacImproveList
 	 */
-	public static List <MacImprove> ReduceMacImproveList(List <MacImprove> MacImproveList){
+	public static List <MacImprove> reduceMacImproveList(List <MacImprove> macImproveList){
 		List<MacImprove> temp = new ArrayList<>();
 		List<MacImprove> temp2 = new ArrayList<>();
 		List<MacImprove> pelet = new ArrayList<>();
 		int i=1;
 		String t="";
 
-		temp=OrgenizeMacImproveList(MacImproveList);
+		temp=OrgenizeMacImproveList(macImproveList);
 
 		for(MacImprove a: temp){
 			if (a.getMAC().equals(t) && i%3!=0 ){
@@ -161,12 +162,12 @@ public class MacImprove {
 		return pelet;
 	}
 
-	public static List<MacImprove> Algo1 (List<MacImprove> MacImproveList){
+	public static List<MacImprove> Algo1 (List<MacImprove> macImproveList){
 		List<MacImprove> ready = new ArrayList<>();
 		List<String> ready2 = new ArrayList<>();
 		List<MacImprove> answer = new ArrayList<>();
 
-		for(MacImprove a: MacImproveList){
+		for(MacImprove a: macImproveList){
 			if(ready2.contains(a.getMAC())){
 				ready.add(a);
 				ready2.add(a.getMAC());
@@ -237,7 +238,7 @@ public class MacImprove {
  * building string to export to csv file (because the PrintWriter work with string)
  */
 	private static void saveToCsv(String csvString) {
-		try(  PrintWriter out = new PrintWriter(BASE_PATH2 + CSV_FILE_NAME)  ){
+		try(  PrintWriter out = new PrintWriter(EXPORT_PATH + CSV_FILE_NAME)  ){
 			out.println(csvString);
 		} catch (FileNotFoundException e) {
 			System.out.println("Failed to save CSV file");

@@ -36,7 +36,9 @@ public class KMLandCSVbuild {
 	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
 	public static String BASE_PATH2 = "C:\\objectoriented\\algo1";
 	public static String BASE_PATH3 = "C:\\objectoriented\\algo2input";
-	public static String CSV_FILE_NAME = "\\exportData.csv";
+	public static String EXPORT_PATH = "C:\\objectoriented\\export";
+	public static String CSV_FILE_NAME1 = "\\exportData1.csv";
+	public static String CSV_FILE_NAME2 = "\\exportData2.csv";
 	public static String KML_FILE_NAME = "\\exportData.kml";
 	public static final String SEPERATOR = ",";
 
@@ -80,7 +82,7 @@ public class KMLandCSVbuild {
 			}
 			kmlDocument.addToFeature(kmlFolder);
 			try {
-				kml.marshal(new File(BASE_PATH1 + KML_FILE_NAME));
+				kml.marshal(new File(EXPORT_PATH + KML_FILE_NAME));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -147,7 +149,7 @@ public class KMLandCSVbuild {
 		}
 
 		public static void saveToCsvFile(String csvString) {
-			try(  PrintWriter out = new PrintWriter(BASE_PATH1 + CSV_FILE_NAME)  ){
+			try(  PrintWriter out = new PrintWriter(EXPORT_PATH + CSV_FILE_NAME1)  ){
 				out.println(csvString);
 			} catch (FileNotFoundException e) {
 				System.out.println("Failed to save CSV file");
@@ -156,7 +158,7 @@ public class KMLandCSVbuild {
 		}
 
 		public static void saveToCsvFile2(String csvString) {
-			try(  PrintWriter out = new PrintWriter(BASE_PATH3 + CSV_FILE_NAME)  ){
+			try(  PrintWriter out = new PrintWriter(EXPORT_PATH + CSV_FILE_NAME2)  ){
 				out.println(csvString);
 			} catch (FileNotFoundException e) {
 				System.out.println("Failed to save CSV file");

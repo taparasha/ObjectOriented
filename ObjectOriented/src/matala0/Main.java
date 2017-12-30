@@ -56,6 +56,7 @@ public class Main {
 			List<WifiNetworkImport> convertCsvToWifiNetworkImport = WifiNetworkImport.convertCsvToWifiNetworkImport(file);
 			wifiNetworkImportList.addAll(convertCsvToWifiNetworkImport);
 		}
+		csvFiles = null;
 
 		List<DataToExport> dataToExportList = DataToExport.buildDataToExportList(wifiNetworkImportList);         
 		
@@ -64,8 +65,7 @@ public class Main {
 			dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 		}
 		
-		List<DataToExport> a= new ArrayList<>();
-		a=DataToExport.SortByUser(dataToExportList);
+		DataToExport.SortByUser(dataToExportList);
 		
 		String csvString = DataToExport.buildCSVData(dataToExportList);		
 		KMLandCSVbuild.saveToCsvFile(csvString);
@@ -76,37 +76,28 @@ public class Main {
 		 * this code take csv files and put the data into objects of DataToExport (for matala 2)
 		 **/
 	
-		List<DataToExport> comb = new ArrayList<>();
+		List<DataToExport> comb = dataToExportList;
 		List<DataToExport> input = new ArrayList<>();
 		
 		List<File> csvFiles3 = DataToExport.getFilesListForDataToExport(BASE_PATH3);
-//		List<File> csvFiles4 = DataToExport.getFilesListForDataToExport(BASE_PATH4);
 
 		for (File file : csvFiles3) {
 			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExport(file);
 			input.addAll(convertCsvToDataToExport);
-			
-		//	for (DataToExport z: input){
-		//		System.out.println("mac: "+z.getAlt());
-		//	}
 		}
-		
-//		for (File file : csvFiles4) {
-	//		List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExport(file);
-		//	comb.addAll(convertCsvToDataToExport);
-		//}
+		csvFiles3 = null;
 
 		
-		List<MacImprove> MacImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
+		List<MacImprove> macImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
+		wifiNetworkImportList = null;
 		List<MacImprove> d = new ArrayList<>();
 		List<MacImprove> r = new ArrayList<>();
 		
-		d=MacImprove.ReduceMacImproveList(MacImproveList);
+		d=MacImprove.reduceMacImproveList(macImproveList);
+		macImproveList = null;
 	    r=MacImprove.Algo1(d);
 		
 		MacImprove.saveToCsvFile(r);
-		
-		comb=dataToExportList;
 		
 		List<DataToExport> algo2 = new ArrayList<>();
 		algo2=DataToExportWithPI.Algo2(comb,input);

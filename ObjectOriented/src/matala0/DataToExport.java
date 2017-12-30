@@ -229,7 +229,7 @@ public class DataToExport {
 	}
 
 	public static List<DataToExport> convertCsvToDataToExport(File file){
-		List<DataToExport> DataToExportList = new ArrayList<>();
+		List<DataToExport> dataToExportList = new ArrayList<>();
 		int i = 1;
 
 		BufferedReader br = null;
@@ -239,24 +239,24 @@ public class DataToExport {
 			String line;
 
 			while ((line = br.readLine()) != null) {
-	//		System.out.println("Line: " + i++ + ") " + line);
+				//		System.out.println("Line: " + i++ + ") " + line);
 
 				DataToExport dataToExport = new DataToExport();
 				String[] entries = line.split(",");
 
 
-				for(int q=6;q<=43;q=+4){
+				for(int q=6; q<=entries.length - 3; q+=4){
 					WifiNetworkExport temp = new WifiNetworkExport();
-				//	temp.setSignal(Integer.parseInt(entries[q+3]));
+					//	temp.setSignal(Integer.parseInt(entries[q+3]));
 					temp.setMAC(entries[q+1]);
-					temp.setSSID(entries[q]);
-				//	temp.setFreuncy(Integer.parseInt(entries[q+2]));
-					
+					temp.setSignal(Integer.parseInt(entries[q+3]));
+					//	temp.setFreuncy(Integer.parseInt(entries[q+2]));
+
 					dataToExport.getWifiNetworks().add(temp);
 				}
 
 				if (dataToExport != null){
-					DataToExportList.add(dataToExport);
+					dataToExportList.add(dataToExport);
 				}
 			}
 		} catch (Exception e) {
@@ -272,14 +272,14 @@ public class DataToExport {
 			}
 		}
 
-		return DataToExportList;
+		return dataToExportList;
 	}
 
-	public static List<File> getFilesListForDataToExport(String BASE_PATH) {
+	public static List<File> getFilesListForDataToExport(String path) {
 		Stream<Path> paths = null;
 		List<File> csvFiles = new ArrayList<>();
 		try {
-			paths = Files.walk(Paths.get(BASE_PATH));
+			paths = Files.walk(Paths.get(path));
 		} catch (IOException e) {
 			System.err.println("Cano't find files in path");
 			e.printStackTrace();
@@ -305,35 +305,33 @@ public class DataToExport {
 	 **/
 
 
-	public static List<DataToExport> SortByUser(List<DataToExport> dataToExportList ){
+	public static void SortByUser(List<DataToExport> dataToExportList){
+		try (Scanner in = new Scanner(System.in)) {	
+			System.out.println("Enter what category you want to sort by (1=coordinate, 2=time):\n");
+			int category = in.nextInt();
 
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter what category you want to sort by (1=coordinate, 2=time):\n");
-		int category = in.nextInt();
+			if (category==1){
+				System.out.println("Enter Lat:\n");
+				double lat = in.nextDouble();
+				System.out.println("Enter Lon:\n");
+				double lon = in.nextDouble();
+				System.out.println("Enter Radius:\n");
+				double radius = in.nextDouble();
 
-		if (category==1){
-			System.out.println("Enter Lat:\n");
-			double lat = in.nextDouble();
-			System.out.println("Enter Lon:\n");
-			double lon = in.nextDouble();
-			System.out.println("Enter Radius:\n");
-			double radius = in.nextDouble();
+				List<DataToExport> sortListByC = DataToExport.SortListByC(dataToExportList, lat, lon, radius);
+				dataToExportList = sortListByC;
+			}
 
-			List<DataToExport> sortListByC = DataToExport.SortListByC(dataToExportList, lat, lon, radius);
-			dataToExportList = sortListByC;
+			if(category==2){
+				System.out.println("Enter Time in format as the follow:(YYYY-MM-DD HH-MM-SS):\n");
+				System.out.println(dataToExportList.get(0).getTime().toString()+"\n");
+				String time = in.next();
+
+				List<DataToExport> sortListByT = DataToExport.SortListByT(dataToExportList, time);
+				dataToExportList = sortListByT;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		if(category==2){
-			System.out.println("Enter Time in format as the follow:(YYYY-MM-DD HH-MM-SS):\n");
-			System.out.println(dataToExportList.get(0).getTime().toString()+"\n");
-			String time = in.next();
-
-			List<DataToExport> sortListByT = DataToExport.SortListByT(dataToExportList, time);
-			dataToExportList = sortListByT;
-		}
-
-	return dataToExportList;
 	}
-
-
 }
