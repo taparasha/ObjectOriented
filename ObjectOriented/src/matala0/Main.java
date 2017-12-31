@@ -1,38 +1,8 @@
 package matala0;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
-import java.util.TimeZone;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import de.micromata.opengis.kml.v_2_2_0.Coordinate;
-import de.micromata.opengis.kml.v_2_2_0.Document;
-import de.micromata.opengis.kml.v_2_2_0.Folder;
-import de.micromata.opengis.kml.v_2_2_0.Icon;
-import de.micromata.opengis.kml.v_2_2_0.IconStyle;
-import de.micromata.opengis.kml.v_2_2_0.Kml;
-import de.micromata.opengis.kml.v_2_2_0.Placemark;
-import de.micromata.opengis.kml.v_2_2_0.Style;
-import de.micromata.opengis.kml.v_2_2_0.StyleSelector;
-import de.micromata.opengis.kml.v_2_2_0.TimeSpan;
-import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 
 /**
  *
@@ -99,8 +69,7 @@ public class Main {
 		
 		MacImprove.saveToCsvFile(r);
 		
-		List<DataToExport> algo2 = new ArrayList<>();
-		algo2=DataToExportWithPI.Algo2(comb,input);
+		List<DataToExport> algo2 = DataToExportWithPI.algo2(comb,input);
 		
 		String newCsv = DataToExport.buildCSVData(algo2);
 		KMLandCSVbuild.saveToCsvFile2(newCsv);

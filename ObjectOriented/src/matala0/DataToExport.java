@@ -239,7 +239,7 @@ public class DataToExport {
 			String line;
 
 			while ((line = br.readLine()) != null) {
-				//		System.out.println("Line: " + i++ + ") " + line);
+		//		System.out.println("Line: " + i++ + ") " + line);
 
 				DataToExport dataToExport = new DataToExport();
 				String[] entries = line.split(",");
@@ -247,10 +247,8 @@ public class DataToExport {
 
 				for(int q=6; q<=entries.length - 3; q+=4){
 					WifiNetworkExport temp = new WifiNetworkExport();
-					//	temp.setSignal(Integer.parseInt(entries[q+3]));
 					temp.setMAC(entries[q+1]);
 					temp.setSignal(Integer.parseInt(entries[q+3]));
-					//	temp.setFreuncy(Integer.parseInt(entries[q+2]));
 
 					dataToExport.getWifiNetworks().add(temp);
 				}

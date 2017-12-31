@@ -61,88 +61,83 @@ public class DataToExportWithPI {
 	}
 	
 		
-	public static List<DataToExport> Algo2(List<DataToExport> combo,List<DataToExport> input){
-		List<DataToExport> answer = new ArrayList<>();
-		for(DataToExport a : input){
+	public static List<DataToExport> algo2(List<DataToExport> combo, List<DataToExport> input){
+		List<DataToExport> ret = new ArrayList<>();
+		for(DataToExport dataToExport : input){
 			DataToExport temp = new DataToExport();
-			temp = CheckSimilarity(a,combo);
-			a.setAlt(temp.getAlt());
-			a.setLat(temp.getLat());
-			a.setLon(temp.getLon());
-			answer.add(a);
+			temp = checkSimilarity(dataToExport,combo);
+			dataToExport.setAlt(temp.getAlt());
+			dataToExport.setLat(temp.getLat());
+			dataToExport.setLon(temp.getLon());
+			ret.add(dataToExport);
 		}
-		return answer;
+		return ret;
 	}
 	
 	
-	public static DataToExport CheckSimilarity(DataToExport a, List<DataToExport> combo){
-		List<DataToExportWithPI> SimilPI = new ArrayList<>();
-		for(DataToExport b : combo){
-			DataToExportWithPI temp = new DataToExportWithPI();
-			temp.setAlt(b.getAlt());
-			temp.setId(b.getId());
-			temp.setLat(b.getLat());
-			temp.setLon(b.getLon());
-			temp.setTime(b.getTime());
-			temp.setWifiNetworks(b.getWifiNetworks());
-			
-			temp.setPI(createPI(a.getWifiNetworks(),b.getWifiNetworks()));
+	public static DataToExport checkSimilarity(DataToExport
+			input, List<DataToExport> combo){
+		List<DataToExportWithPI> similPI = new ArrayList<>();
+		for(DataToExport comboDataToExport : combo){
+			DataToExportWithPI temp = buildDataToExportWithPI(comboDataToExport);
+			double pi = createPI(input.getWifiNetworks(),comboDataToExport.getWifiNetworks());
+			temp.setPI(pi);
 			//System.out.println("PI: "+temp.PI);
-			SimilPI.add(temp);
+			similPI.add(temp);
 		}
 		
-		List<DataToExportWithPI> sortSimilPI = new ArrayList<>();
-		sortSimilPI = sortByPI(SimilPI);
+		similPI = sortByPI(similPI);
 		
-		List<DataToExportWithPI> OnlyThree = new ArrayList<>();
-		for(int i=0;i<3;i++){
-			OnlyThree.add(sortSimilPI.get(i));
-		}
-		
-		DataToExport answer = new DataToExport();
-		answer = Algo1(OnlyThree);
-		
-		return answer;
+		return algo1(similPI);
+	}
+	private static DataToExportWithPI buildDataToExportWithPI(DataToExport dataToExport) {
+		DataToExportWithPI ret = new DataToExportWithPI();
+		ret.setAlt(dataToExport.getAlt());
+		ret.setId(dataToExport.getId());
+		ret.setLat(dataToExport.getLat());
+		ret.setLon(dataToExport.getLon());
+		ret.setTime(dataToExport.getTime());
+		ret.setWifiNetworks(dataToExport.getWifiNetworks());
+		return ret;
 	}
 	
 	
 	public static double createPI(List<WifiNetworkExport> input, List<WifiNetworkExport> combo){
-		double inputSig, dataSig, diff, sigDiff=0.4;
-		int i=1, norm=10000;
-		double weight=1;
+		double inputLineSig, comboLineSig, diff, sigDiff = 0.4;
+		int norm = 10000;
+		double weight = 1;
 		
-		for(WifiNetworkExport a: input){
-			System.out.println(a.getMAC());}
-
-		
-		for(WifiNetworkExport a: input){
-			if(a.getSignal()==0)
-			{inputSig=(-120);}
-//			System.out.println(a.getMAC());
-			
-			inputSig=a.getSignal();
-			dataSig=combo.get(i).getSignal();
-			diff=inputSig-dataSig;
-			weight=weight*(norm/(Math.pow(diff, sigDiff)*Math.pow(inputSig, 2)));
-//			System.out.println("weight= "+weight);
-			i++;
-			break;
+		for(WifiNetworkExport wifiNetworkExport: input){
+			String mac1 = wifiNetworkExport.getMAC();
+			comboLineSig = -120;
+			for (WifiNetworkExport comboWifiNetworkExport : combo) {
+				String mac2 = comboWifiNetworkExport.getMAC();
+				if (mac1 == mac2) {
+					comboLineSig = comboWifiNetworkExport.getSignal();
+					break;
+				}
+			}
+			inputLineSig = wifiNetworkExport.getSignal();
+			diff = inputLineSig - comboLineSig;
+			double pow1 = Math.pow(diff, sigDiff);
+			double pow2 = Math.pow(inputLineSig, 2);
+			weight = weight * (norm/(pow1*pow2));
 		}
 		return weight;
 	}
 	
-	public static  DataToExport Algo1 (List<DataToExportWithPI> OnlyThree){
+	public static  DataToExport algo1 (List<DataToExportWithPI> similPI){
 		DataToExport finala = new DataToExport();
 		double sumLat=0, sumLon=0, sumAlt=0;
 		double sumWeight=0;
 
-		for(DataToExportWithPI a: OnlyThree){
-			double weigth=a.getPI();
-
-			sumAlt=+(a.getAlt()*weigth);
-			sumLon=+(a.getLon()*weigth);                          
-			sumLat=+(a.getLat()*weigth);   	
-			sumWeight=+weigth;
+		for (int i = 0; i < 3; i++) {
+			DataToExportWithPI dataToExportWithPI = similPI.get(i);
+			double weigth = dataToExportWithPI.getPI();
+			sumAlt += (dataToExportWithPI.getAlt() * weigth);
+			sumLon += (dataToExportWithPI.getLon() * weigth);                          
+			sumLat += (dataToExportWithPI.getLat() * weigth);   	
+			sumWeight += weigth;
 		}
 		finala.setAlt(sumAlt/sumWeight);
 		finala.setLat(sumLat/sumWeight);
@@ -150,16 +145,16 @@ public class DataToExportWithPI {
 		return finala;
 	}
 	
-	public static List<DataToExportWithPI> sortByPI(List<DataToExportWithPI> sortSimilPi){
-		if (sortSimilPi.size() > 0) {
-			Collections.sort(sortSimilPi, new Comparator<DataToExportWithPI>() {
+	public static List<DataToExportWithPI> sortByPI(List<DataToExportWithPI> similPI){
+		if (!similPI.isEmpty() && similPI.size() > 0) {
+			Collections.sort(similPI, new Comparator<DataToExportWithPI>() {
 				@Override
 				public int compare(final DataToExportWithPI object1, final DataToExportWithPI object2) {
-					return ((Integer)(int)((object1.getPI()*1000000))).compareTo(((Integer)(int)((object2.getPI()*1000000))));
+					return ((Double)object1.getPI()).compareTo(((Double)object2.getPI()));
 				}
 			});
 		}
-		return sortSimilPi;
+		return similPI;
 	}
 	
 	
