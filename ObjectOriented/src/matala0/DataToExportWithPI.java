@@ -88,7 +88,7 @@ public class DataToExportWithPI {
 		
 		similPI = sortByPI(similPI);
 		
-		return algo1(similPI);
+		return algo1withpi(similPI);
 	}
 	private static DataToExportWithPI buildDataToExportWithPI(DataToExport dataToExport) {
 		DataToExportWithPI ret = new DataToExportWithPI();
@@ -126,7 +126,7 @@ public class DataToExportWithPI {
 		return weight;
 	}
 	
-	public static  DataToExport algo1 (List<DataToExportWithPI> similPI){
+	public static  DataToExport algo1withpi (List<DataToExportWithPI> similPI){
 		DataToExport finala = new DataToExport();
 		double sumLat=0, sumLon=0, sumAlt=0;
 		double sumWeight=0;
