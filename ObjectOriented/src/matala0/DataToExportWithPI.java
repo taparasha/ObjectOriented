@@ -114,6 +114,7 @@ public class DataToExportWithPI {
 				String mac2 = comboWifiNetworkExport.getMAC();
 				if (mac1 == mac2) {
 					comboLineSig = comboWifiNetworkExport.getSignal();
+					System.out.println("2");
 					break;
 				}
 			}
