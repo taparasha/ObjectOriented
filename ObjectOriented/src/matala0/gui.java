@@ -297,7 +297,7 @@ public class gui {
 		txtEnterDeviceName.setColumns(10);
 		
 		JButton btnSubmit = new JButton("FILTER NOW!");
-		btnSubmit.setBounds(361, 27, 89, 23);
+		btnSubmit.setBounds(361, 27, 110, 23);
 		panel_5.add(btnSubmit);
 		
 		JPanel panel_6 = new JPanel();
