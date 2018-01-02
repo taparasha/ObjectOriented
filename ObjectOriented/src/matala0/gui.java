@@ -235,11 +235,11 @@ public class gui {
 		panel_4.add(label_2);
 		
 		JLabel lblMax = new JLabel("MAX");
-		lblMax.setBounds(119, 11, 92, 29);
+		lblMax.setBounds(53, 11, 92, 29);
 		panel_4.add(lblMax);
 		
 		JLabel label_3 = new JLabel("MIN");
-		label_3.setBounds(302, 11, 92, 29);
+		label_3.setBounds(292, 11, 92, 29);
 		panel_4.add(label_3);
 		
 		txtEnterLat = new JTextField();
