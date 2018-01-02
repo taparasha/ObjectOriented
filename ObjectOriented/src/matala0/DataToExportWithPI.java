@@ -75,8 +75,7 @@ public class DataToExportWithPI {
 	}
 	
 	
-	public static DataToExport checkSimilarity(DataToExport
-			input, List<DataToExport> combo){
+	public static DataToExport checkSimilarity(DataToExport input, List<DataToExport> combo){
 		List<DataToExportWithPI> similPI = new ArrayList<>();
 		for(DataToExport comboDataToExport : combo){
 			DataToExportWithPI temp = buildDataToExportWithPI(comboDataToExport);
@@ -112,8 +111,9 @@ public class DataToExportWithPI {
 			comboLineSig = -120;
 			for (WifiNetworkExport comboWifiNetworkExport : combo) {
 				String mac2 = comboWifiNetworkExport.getMAC();
-				if (mac1 == mac2) {
+				if (mac1.equals(mac2) && mac2.equals("1c:b9:c4:16:e5:a8")) {
 					comboLineSig = comboWifiNetworkExport.getSignal();
+					System.out.println("2");
 					break;
 				}
 			}
