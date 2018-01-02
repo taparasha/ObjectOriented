@@ -302,7 +302,7 @@ public class gui {
 		
 		JPanel panel_6 = new JPanel();
 		tabbedPane_1.addTab("New tab", null, panel_6, null);
-		
+		//
 		
 		
 	}
