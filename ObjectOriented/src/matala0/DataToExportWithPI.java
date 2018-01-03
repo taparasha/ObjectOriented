@@ -8,7 +8,6 @@ import java.util.List;
 
 public class DataToExportWithPI {
 
-
 	private long id;
 	private Date time;
 	private double lat;
@@ -64,12 +63,12 @@ public class DataToExportWithPI {
 	public static List<DataToExport> algo2(List<DataToExport> combo, List<DataToExport> input){
 		List<DataToExport> ret = new ArrayList<>();
 		for(DataToExport dataToExport : input){
-			DataToExport temp = new DataToExport();
-			temp = checkSimilarity(dataToExport,combo);
+			DataToExport temp = checkSimilarity(dataToExport,combo);
 			dataToExport.setAlt(temp.getAlt());
 			dataToExport.setLat(temp.getLat());
 			dataToExport.setLon(temp.getLon());
 			ret.add(dataToExport);
+			
 		}
 		return ret;
 	}
@@ -81,14 +80,14 @@ public class DataToExportWithPI {
 			DataToExportWithPI temp = buildDataToExportWithPI(comboDataToExport);
 			double pi = createPI(input.getWifiNetworks(),comboDataToExport.getWifiNetworks());
 			temp.setPI(pi);
-			//System.out.println("PI: "+temp.PI);
 			similPI.add(temp);
 		}
-		
 		similPI = sortByPI(similPI);
 		
 		return algo1withpi(similPI);
 	}
+	
+	
 	private static DataToExportWithPI buildDataToExportWithPI(DataToExport dataToExport) {
 		DataToExportWithPI ret = new DataToExportWithPI();
 		ret.setAlt(dataToExport.getAlt());
@@ -111,10 +110,9 @@ public class DataToExportWithPI {
 			comboLineSig = -120;
 			for (WifiNetworkExport comboWifiNetworkExport : combo) {
 				String mac2 = comboWifiNetworkExport.getMAC();
-				if (mac1.equals(mac2) && mac2.equals("1c:b9:c4:16:e5:a8")) {
+				if (mac1.equals(mac2)) {
 					comboLineSig = comboWifiNetworkExport.getSignal();
-					System.out.println("2");
-					break;
+					continue;
 				}
 			}
 			inputLineSig = wifiNetworkExport.getSignal();
@@ -128,12 +126,17 @@ public class DataToExportWithPI {
 	
 	public static  DataToExport algo1withpi (List<DataToExportWithPI> similPI){
 		DataToExport finala = new DataToExport();
-		double sumLat=0, sumLon=0, sumAlt=0;
+		double sumLat=0, sumLon=0, sumAlt=0, g=0, t=0, e=0;
 		double sumWeight=0;
-
+		
 		for (int i = 0; i < 3; i++) {
 			DataToExportWithPI dataToExportWithPI = similPI.get(i);
 			double weigth = dataToExportWithPI.getPI();
+			g=dataToExportWithPI.getAlt();
+			t=dataToExportWithPI.getLon();
+			e=dataToExportWithPI.getLat();
+			
+			
 			sumAlt += (dataToExportWithPI.getAlt() * weigth);
 			sumLon += (dataToExportWithPI.getLon() * weigth);                          
 			sumLat += (dataToExportWithPI.getLat() * weigth);   	
@@ -150,7 +153,8 @@ public class DataToExportWithPI {
 			Collections.sort(similPI, new Comparator<DataToExportWithPI>() {
 				@Override
 				public int compare(final DataToExportWithPI object1, final DataToExportWithPI object2) {
-					return ((Double)object1.getPI()).compareTo(((Double)object2.getPI()));
+					 Collections.reverse(similPI);
+					return ((Double)(object1.getPI())).compareTo(((Double)(object2.getPI())));
 				}
 			});
 		}
