@@ -42,6 +42,8 @@ public class GUIforMatala3 {
 	
 	private Label lblMessage;
 	private String filePath;
+	private Label label_8;
+	private int sum;
 	/**
 	 * Launch the application.
 	 */
@@ -113,6 +115,7 @@ public class GUIforMatala3 {
 				lblMessage.setText(filePath);
 				
 				
+				
 				List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
 				List<File> csvFiles = WifiNetworkImport.getFilesListForNetworkImport(filePath);
 				
@@ -123,12 +126,18 @@ public class GUIforMatala3 {
 				}
 				csvFiles = null;
 
-				List<DataToExport> file = DataToExport.buildDataToExportList(wifiNetworkImportList); 
+				List<DataToExport> temp = DataToExport.buildDataToExportList(wifiNetworkImportList); 
 				
-				for (DataToExport dataToExport : file) {
+				for (DataToExport dataToExport : temp) {
 					List<WifiNetworkExport> sortWifiNetworksBySignal = WifiNetworkExport.sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
 					dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
 				}
+				
+				for (DataToExport a : temp) {
+					file.add(a);					
+				}
+				
+				label_8.setText(Integer.toString(file.size()));
 			}
 		});
 		btnEnter.setBounds(317, 26, 152, 23);
@@ -157,7 +166,7 @@ public class GUIforMatala3 {
 				List<File> csvFiles3 = DataToExport.getFilesListForDataToExport(filePath);
 
 				for (File file : csvFiles3) {
-					List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExportforalgo2(file);
+					List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExportfromcombofile(file);
 					NewListToAdd.addAll(convertCsvToDataToExport);
 				}
 				csvFiles3 = null;				
@@ -166,7 +175,7 @@ public class GUIforMatala3 {
 					file.add(a);					
 				}
 				
-				
+				label_8.setText(Integer.toString(file.size()));
 			}
 		});
 		btnAddCsv.setBounds(317, 99, 154, 23);
@@ -404,7 +413,7 @@ public class GUIforMatala3 {
 		separator.setBounds(0, 127, 590, 2);
 		panel_1.add(separator);
 		
-		lblMessage = new Label("name of file");//show the name of the uploaded file 
+		lblMessage = new Label("name of file last uploaded");//show the name of the uploaded file 
 		lblMessage.setBackground(UIManager.getColor("Button.light"));
 		lblMessage.setBounds(24, 10, 256, 23);
 		panel_1.add(lblMessage);
@@ -422,7 +431,7 @@ public class GUIforMatala3 {
 		label_4.setBounds(22, 39, 43, 32);
 		panel_1.add(label_4);
 		
-		Label label_8 = new Label("0");
+		label_8 = new Label("0");
 		label_8.setBackground(SystemColor.controlHighlight);
 		label_8.setBounds(65, 43, 101, 23);
 		panel_1.add(label_8);

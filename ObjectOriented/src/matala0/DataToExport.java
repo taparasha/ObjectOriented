@@ -228,7 +228,7 @@ public class DataToExport {
 		return sortList;
 	}
 
-	public static List<DataToExport> convertCsvToDataToExportforalgo2(File file){
+	public static List<DataToExport> convertCsvToDataToExportfrominputfile(File file){
 		List<DataToExport> dataToExportList = new ArrayList<>();
 		int i = 1;
 
@@ -243,8 +243,7 @@ public class DataToExport {
 
 				DataToExport dataToExport = new DataToExport();
 				String[] entries = line.split(",");
-
-
+        						
 				for(int q=6; q<=entries.length - 3; q+=4){
 					WifiNetworkExport temp = new WifiNetworkExport();
 					temp.setMAC(entries[q+1]);
@@ -273,6 +272,58 @@ public class DataToExport {
 		return dataToExportList;
 	}
 
+	public static List<DataToExport> convertCsvToDataToExportfromcombofile(File file){
+		List<DataToExport> dataToExportList = new ArrayList<>();
+		int i = 1;
+
+		BufferedReader br = null;
+
+		try {
+			br = new BufferedReader(new FileReader(file));
+			String line;
+			br.readLine();
+			br.readLine();
+
+			while ((line = br.readLine()) != null) {
+		//		System.out.println("Line: " + i++ + ") " + line);
+
+				DataToExport dataToExport = new DataToExport();
+				String[] entries = line.split(",");
+                 
+		//		dataToExport.setTime(WifiNetworkImport.getDateFromString(entries[0]));
+				dataToExport.setLat(Double.parseDouble(entries[2]));
+				dataToExport.setLon(Double.parseDouble(entries[3]));
+				dataToExport.setAlt(Double.parseDouble(entries[4]));
+				
+				for(int q=6; q<=entries.length - 3; q+=4){
+					WifiNetworkExport temp = new WifiNetworkExport();
+					temp.setMAC(entries[q+1]);
+					temp.setSignal(Integer.parseInt(entries[q+3]));
+
+					dataToExport.getWifiNetworks().add(temp);
+				}
+
+				if (dataToExport != null){
+					dataToExportList.add(dataToExport);
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Failed to import file: " + file.getName() + ". On line: " + (i-1));
+			e.printStackTrace();
+		}finally {
+			if (br != null){
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return dataToExportList;
+	}
+
+	
 	public static List<File> getFilesListForDataToExport(String path) {
 		Stream<Path> paths = null;
 		List<File> csvFiles = new ArrayList<>();

@@ -53,7 +53,7 @@ public class Main {
 		List<File> csvFiles3 = DataToExport.getFilesListForDataToExport(BASE_PATH3);
 
 		for (File file : csvFiles3) {
-			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExportforalgo2(file);
+			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExportfrominputfile(file);
 			input.addAll(convertCsvToDataToExport);
 		}
 		csvFiles3 = null;
