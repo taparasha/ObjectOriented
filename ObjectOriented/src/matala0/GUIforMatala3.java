@@ -8,6 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JSeparator;
@@ -35,7 +38,10 @@ public class GUIforMatala3 {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField txtEnterNameTo;
-
+	
+	
+	private Label lblMessage;
+	private String filePath;
 	/**
 	 * Launch the application.
 	 */
@@ -63,6 +69,12 @@ public class GUIforMatala3 {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		List<DataToExport> file = new ArrayList<>();
+		
+		
+		
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 631, 422);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,14 +90,54 @@ public class GUIforMatala3 {
 		panel.setLayout(null);
 		
 		txtEnterFolderPath = new JTextField();
+		txtEnterFolderPath.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+	/**
+	 * this function connects between the code and the button of upload wiggle files. this button let you 
+	 * add folder contains files of Wiggle wifi and enter them to databases of WifiNetworkImport and DataToExport
+	 */
+		
 		txtEnterFolderPath.setText("Enter Folder Of Wigle files");
 		txtEnterFolderPath.setBounds(41, 28, 267, 22);
 		panel.add(txtEnterFolderPath);
 		txtEnterFolderPath.setColumns(10);
 		
 		JButton btnEnter = new JButton("Wigle Folder Upload");
+		btnEnter.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				filePath = txtEnterFolderPath.getText();
+				lblMessage.setText(filePath);
+				
+				
+				List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
+				List<File> csvFiles = WifiNetworkImport.getFilesListForNetworkImport(filePath);
+				
+				
+				for (File file : csvFiles) {
+					List<WifiNetworkImport> convertCsvToWifiNetworkImport = WifiNetworkImport.convertCsvToWifiNetworkImport(file);
+					wifiNetworkImportList.addAll(convertCsvToWifiNetworkImport);
+				}
+				csvFiles = null;
+
+				List<DataToExport> file = DataToExport.buildDataToExportList(wifiNetworkImportList); 
+				
+				for (DataToExport dataToExport : file) {
+					List<WifiNetworkExport> sortWifiNetworksBySignal = WifiNetworkExport.sortWifiNetworksBySignal(dataToExport.getWifiNetworks());
+					dataToExport.setWifiNetworks(sortWifiNetworksBySignal);
+				}
+			}
+		});
 		btnEnter.setBounds(317, 26, 152, 23);
 		panel.add(btnEnter);
+		
+		/**
+		 * this function connects between the code and the button of upload combo file. this button let you add
+		 * a new file of DataToExport (what we call combo file) to your exist database of DataToExport
+		 */
 		
 		txtEnterCsvPath = new JTextField();
 		txtEnterCsvPath.setText("Enter Comb File Name");
@@ -93,7 +145,30 @@ public class GUIforMatala3 {
 		panel.add(txtEnterCsvPath);
 		txtEnterCsvPath.setColumns(10);
 		
-		JButton btnAddCsv = new JButton("Comb File Upload");
+		JButton btnAddCsv = new JButton("Comb File Upload"); //Upload comb file
+		btnAddCsv.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				filePath = txtEnterCsvPath.getText();
+				lblMessage.setText(filePath);
+				
+				List<DataToExport> NewListToAdd = new ArrayList<>();
+
+				List<File> csvFiles3 = DataToExport.getFilesListForDataToExport(filePath);
+
+				for (File file : csvFiles3) {
+					List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExportforalgo2(file);
+					NewListToAdd.addAll(convertCsvToDataToExport);
+				}
+				csvFiles3 = null;				
+				
+				for (DataToExport a : NewListToAdd) {
+					file.add(a);					
+				}
+				
+				
+			}
+		});
 		btnAddCsv.setBounds(317, 99, 154, 23);
 		panel.add(btnAddCsv);
 		
@@ -329,10 +404,10 @@ public class GUIforMatala3 {
 		separator.setBounds(0, 127, 590, 2);
 		panel_1.add(separator);
 		
-		Label label = new Label("name of file");//show the name of the uploaded file 
-		label.setBackground(UIManager.getColor("Button.light"));
-		label.setBounds(24, 10, 256, 23);
-		panel_1.add(label);
+		lblMessage = new Label("name of file");//show the name of the uploaded file 
+		lblMessage.setBackground(UIManager.getColor("Button.light"));
+		lblMessage.setBounds(24, 10, 256, 23);
+		panel_1.add(lblMessage);
 		
 		Label label_1 = new Label("Filters");
 		label_1.setBounds(23, 75, 43, 32);

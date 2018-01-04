@@ -228,7 +228,7 @@ public class DataToExport {
 		return sortList;
 	}
 
-	public static List<DataToExport> convertCsvToDataToExport(File file){
+	public static List<DataToExport> convertCsvToDataToExportforalgo2(File file){
 		List<DataToExport> dataToExportList = new ArrayList<>();
 		int i = 1;
 

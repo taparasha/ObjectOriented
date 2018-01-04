@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  */
 public class WifiNetworkImport {
 	
-	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
+
 	public static String BASE_PATH2 = "C:\\objectoriented\\algo1";
 	public static String CSV_FILE_NAME = "\\exportData.csv";
 	public static String KML_FILE_NAME = "\\exportData.kml";
@@ -181,11 +181,11 @@ public class WifiNetworkImport {
 		return date;
 	}
 
-	public static List<File> getFilesListForNetworkImport() {
+	public static List<File> getFilesListForNetworkImport(String BASE_PATH) {
 		Stream<Path> paths = null;
 		List<File> csvFiles = new ArrayList<>();
 		try {
-			paths = Files.walk(Paths.get(BASE_PATH1));
+			paths = Files.walk(Paths.get(BASE_PATH));
 		} catch (IOException e) {
 			System.err.println("Cano't find files in path");
 			e.printStackTrace();

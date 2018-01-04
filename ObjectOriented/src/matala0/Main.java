@@ -11,6 +11,7 @@ import java.util.List;
  */
 
 public class Main {
+	public static String BASE_PATH1 = "C:\\objectoriented\\matala1";
 	public static String BASE_PATH3 = "C:\\objectoriented\\algo2input";
 	public static String BASE_PATH4 = "C:\\objectoriented\\algo2comb";
 	public static void main(String[] args) {
@@ -20,7 +21,7 @@ public class Main {
 		**/
 		
 		List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
-		List<File> csvFiles = WifiNetworkImport.getFilesListForNetworkImport();
+		List<File> csvFiles = WifiNetworkImport.getFilesListForNetworkImport(BASE_PATH1);
 
 		for (File file : csvFiles) {
 			List<WifiNetworkImport> convertCsvToWifiNetworkImport = WifiNetworkImport.convertCsvToWifiNetworkImport(file);
@@ -52,7 +53,7 @@ public class Main {
 		List<File> csvFiles3 = DataToExport.getFilesListForDataToExport(BASE_PATH3);
 
 		for (File file : csvFiles3) {
-			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExport(file);
+			List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExportforalgo2(file);
 			input.addAll(convertCsvToDataToExport);
 		}
 		csvFiles3 = null;
