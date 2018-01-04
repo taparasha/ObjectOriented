@@ -148,18 +148,22 @@ public class DataToExportWithPI {
 		return finala;
 	}
 	
+	
+	
 	public static List<DataToExportWithPI> sortByPI(List<DataToExportWithPI> similPI){
 		if (!similPI.isEmpty() && similPI.size() > 0) {
 			Collections.sort(similPI, new Comparator<DataToExportWithPI>() {
 				@Override
 				public int compare(final DataToExportWithPI object1, final DataToExportWithPI object2) {
-					 Collections.reverse(similPI);
 					return ((Double)(object1.getPI())).compareTo(((Double)(object2.getPI())));
 				}
 			});
 		}
+		Collections.reverse(similPI);
 		return similPI;
 	}
+
+
 	
 	
 }
