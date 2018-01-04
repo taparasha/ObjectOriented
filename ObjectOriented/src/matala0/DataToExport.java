@@ -283,6 +283,7 @@ public class DataToExport {
 			String line;
 			br.readLine();
 			br.readLine();
+			br.readLine();
 
 			while ((line = br.readLine()) != null) {
 		//		System.out.println("Line: " + i++ + ") " + line);
@@ -290,8 +291,8 @@ public class DataToExport {
 				DataToExport dataToExport = new DataToExport();
 				String[] entries = line.split(",");
                  
-		//		dataToExport.setTime(WifiNetworkImport.getDateFromString(entries[0]));
-				dataToExport.setLat(Double.parseDouble(entries[2]));
+				//dataToExport.setTime(WifiNetworkImport.getDateFromString(entries[0]));
+        		dataToExport.setLat(Double.parseDouble(entries[2]));
 				dataToExport.setLon(Double.parseDouble(entries[3]));
 				dataToExport.setAlt(Double.parseDouble(entries[4]));
 				

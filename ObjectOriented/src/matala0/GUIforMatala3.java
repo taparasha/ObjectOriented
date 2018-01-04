@@ -95,11 +95,6 @@ public class GUIforMatala3 {
 	 */
 	private void initialize() {
 
-
-
-
-
-
 		frame = new JFrame();
 		frame.setBounds(100, 100, 631, 422);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -192,7 +187,6 @@ public class GUIforMatala3 {
 					List<DataToExport> convertCsvToDataToExport = DataToExport.convertCsvToDataToExportfromcombofile(file);
 					NewListToAdd.addAll(convertCsvToDataToExport);
 				}
-				csvFiles3 = null;				
 
 				for (DataToExport a : NewListToAdd) {
 					file.add(a);					
