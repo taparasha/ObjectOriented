@@ -8,7 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -43,7 +46,27 @@ public class GUIforMatala3 {
 	private Label lblMessage;
 	private String filePath;
 	private Label label_8;
+	private Label label_2;
 	private int sum;
+	private Label label;
+	private Label label_10;
+	private Label label_12;
+	
+	private double alt1;
+	private double lat1;
+	private double lon1;
+	
+	private double alt2;
+	private double lat2;
+	private double lon2;
+	
+	private List<File> csvFiles = new ArrayList<>();
+	private List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
+	
+	String filters = "  ";
+	List<DataToExport> file = new ArrayList<>();
+	private JTextField txtEnterMac;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -72,7 +95,7 @@ public class GUIforMatala3 {
 	 */
 	private void initialize() {
 		
-		List<DataToExport> file = new ArrayList<>();
+		
 		
 		
 		
@@ -116,8 +139,8 @@ public class GUIforMatala3 {
 				
 				
 				
-				List<WifiNetworkImport> wifiNetworkImportList = new ArrayList<>();
-				List<File> csvFiles = WifiNetworkImport.getFilesListForNetworkImport(filePath);
+				
+				csvFiles = WifiNetworkImport.getFilesListForNetworkImport(filePath);
 				
 				
 				for (File file : csvFiles) {
@@ -358,14 +381,36 @@ public class GUIforMatala3 {
 		panel_4.add(textField_4);
 		
 		JButton btnFilterNow = new JButton("Apply");
+		btnFilterNow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lat1 = Double.parseDouble(txtEnterLat.getText());				
+				lon1 = Double.parseDouble(textField.getText());
+				alt1 = Double.parseDouble(textField_1.getText());
+				
+				lat2 = Double.parseDouble(textField_2.getText());
+				lon2 = Double.parseDouble(textField_3.getText());
+				alt2 = Double.parseDouble(textField_4.getText());
+				
+				double radius = (DataToExport.distance(lat1, lon1, lat2, lon2)/1000)/2;
+				double centerLat = (lat1+lat2)/2;
+				double centerLon = (lon1+lon2)/2;
+				
+				List<DataToExport> temp = new ArrayList<>();
+				temp = DataToExport.SortListByC(file, centerLat, centerLon, radius);
+				
+				file = temp;
+				label_8.setText(Integer.toString(file.size()));
+				label_2.setText(filters+"\nCenter- lat:"+centerLat+", lon:"+centerLon+", Radius:"+radius+", ");
+			}
+		});
 		btnFilterNow.setBounds(214, 219, 99, 23);
 		panel_4.add(btnFilterNow);
 		
 		JPanel panel_5 = new JPanel();
-		tabbedPane_1.addTab("Filter By Name", null, panel_5, null);
+		tabbedPane_1.addTab("Filter By Device", null, panel_5, null);
 		panel_5.setLayout(null);
 		
-		JLabel lblFilterByName = new JLabel("Filter By Name");
+		JLabel lblFilterByName = new JLabel("Filter By Device");
 		lblFilterByName.setBounds(27, 55, 129, 24);
 		panel_5.add(lblFilterByName);
 		
@@ -376,6 +421,16 @@ public class GUIforMatala3 {
 		panel_5.add(txtEnterNameTo);
 		
 		JButton button_1 = new JButton("Apply");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { //filter by device
+				
+				String device = txtEnterNameTo.getText();
+				
+				for(DataToExport a : file){
+				}
+				
+			}
+		});
 		button_1.setBounds(332, 59, 99, 23);
 		panel_5.add(button_1);
 		
@@ -383,48 +438,55 @@ public class GUIforMatala3 {
 		tabbedPane.addTab("Export", null, panel_1, null);
 		panel_1.setLayout(null);
 		
-		JButton btnMakeCsvFile = new JButton("make CSV File");
+		JButton btnMakeCsvFile = new JButton("Create CSV File");
 		btnMakeCsvFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String csvString = DataToExport.buildCSVData(file);		
+				KMLandCSVbuild.saveToCsvFile(csvString);
 			}
 		});
-		btnMakeCsvFile.setBounds(288, 94, 123, 23);
+		btnMakeCsvFile.setBounds(234, 208, 123, 23);
 		panel_1.add(btnMakeCsvFile);
 		
-		JButton button = new JButton("make KML File");
-		button.addActionListener(new ActionListener() {
+		JButton btnCreateKmlFile = new JButton("Create KML File");
+		btnCreateKmlFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				KMLandCSVbuild.saveTokmlFile(file);
 			}
 		});
-		button.setBounds(418, 93, 123, 23);
-		panel_1.add(button);
+		btnCreateKmlFile.setBounds(367, 208, 123, 23);
+		panel_1.add(btnCreateKmlFile);
 		
 		JButton btnClearData = new JButton("CLEAR DATA");
 		btnClearData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "Are you sure you want to CLEAR?");
+				file.clear();
+				label_8.setText(Integer.toString(file.size()));
+				label_2.setText("");
+				lblMessage.setText("Name of file last uploaded");
 			}
 		});
 		btnClearData.setForeground(Color.RED);
-		btnClearData.setBounds(24, 182, 123, 23);
+		btnClearData.setBounds(24, 273, 123, 23);
 		panel_1.add(btnClearData);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 127, 590, 2);
+		separator.setBounds(0, 242, 590, 2);
 		panel_1.add(separator);
 		
-		lblMessage = new Label("name of file last uploaded");//show the name of the uploaded file 
+		lblMessage = new Label("Name of file last uploaded");//show the name of the uploaded file 
 		lblMessage.setBackground(UIManager.getColor("Button.light"));
 		lblMessage.setBounds(24, 10, 256, 23);
 		panel_1.add(lblMessage);
 		
 		Label label_1 = new Label("Filters");
-		label_1.setBounds(23, 75, 43, 32);
+		label_1.setBounds(23, 75, 37, 32);
 		panel_1.add(label_1);
 		
-		Label label_2 = new Label(" None");
+		label_2 = new Label(" None");
 		label_2.setBackground(SystemColor.controlHighlight);
-		label_2.setBounds(61, 81, 101, 23);
+		label_2.setBounds(61, 81, 500, 109);
 		panel_1.add(label_2);
 		
 		Label label_4 = new Label("Lines");
@@ -435,6 +497,79 @@ public class GUIforMatala3 {
 		label_8.setBackground(SystemColor.controlHighlight);
 		label_8.setBounds(65, 43, 101, 23);
 		panel_1.add(label_8);
+		
+		JPanel panel_6 = new JPanel();
+		tabbedPane.addTab("Algo 1", null, panel_6, null);
+		panel_6.setLayout(null);
+		
+		JLabel lblEnterSpecificMac = new JLabel("Enter MAC you want to improve:");
+		lblEnterSpecificMac.setBounds(29, 33, 184, 24);
+		panel_6.add(lblEnterSpecificMac);
+		
+		txtEnterMac = new JTextField();
+		txtEnterMac.setText("Enter MAC");
+		txtEnterMac.setColumns(10);
+		txtEnterMac.setBounds(29, 54, 184, 22);
+		panel_6.add(txtEnterMac);
+		
+		JButton button = new JButton("Apply");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String MAC = txtEnterMac.getText();
+				MacImprove temp = new MacImprove();
+				
+				List<MacImprove> macImproveList = MacImprove.buildMacImproveList(wifiNetworkImportList);
+				List<MacImprove> d = new ArrayList<>();
+				List<MacImprove> r = new ArrayList<>();
+				
+				d=MacImprove.reduceMacImproveList(macImproveList);
+			    r=MacImprove.Algo1(d);
+			    
+				for(MacImprove a: r){
+					if(a.getMAC().equals(MAC)){
+						temp=a;
+					}
+					break;
+				}
+				
+				label.setText(Double.toString(temp.getCurrentLatitude()));
+				label_10.setText(Double.toString(temp.getCurrentLongitude()));
+				label_12.setText(Double.toString(temp.getAltitudeMeters()));
+			}
+		});
+		button.setBounds(234, 54, 99, 23);
+		panel_6.add(button);
+		
+		label = new Label("");
+		label.setBackground(SystemColor.controlHighlight);
+		label.setBounds(57, 152, 101, 23);
+		panel_6.add(label);
+		
+		Label label_9 = new Label("Lat");
+		label_9.setBounds(29, 152, 43, 32);
+		panel_6.add(label_9);
+		
+		label_10 = new Label("");
+		label_10.setBackground(SystemColor.controlHighlight);
+		label_10.setBounds(209, 156, 101, 23);
+		panel_6.add(label_10);
+		
+		Label label_11 = new Label("Lon");
+		label_11.setBounds(182, 152, 43, 32);
+		panel_6.add(label_11);
+		
+		label_12 = new Label("");
+		label_12.setBackground(SystemColor.controlHighlight);
+		label_12.setBounds(369, 156, 101, 23);
+		panel_6.add(label_12);
+		
+		Label label_13 = new Label("Alt");
+		label_13.setBounds(343, 152, 43, 32);
+		panel_6.add(label_13);
+		
+		JPanel panel_7 = new JPanel();
+		tabbedPane.addTab("Algo 2", null, panel_7, null);
+		panel_7.setLayout(null);
 		//
 		
 		
