@@ -84,6 +84,11 @@ public class DataToExportWithPI {
 		}
 		similPI = sortByPI(similPI);
 		
+	   for (DataToExportWithPI dataToExportWithPI : similPI) {
+		System.out.println(dataToExportWithPI.getPI());
+	}
+		
+		
 		return algo1withpi(similPI);
 	}
 	
@@ -108,15 +113,17 @@ public class DataToExportWithPI {
 		for(WifiNetworkExport wifiNetworkExport: input){
 			String mac1 = wifiNetworkExport.getMAC();
 			comboLineSig = -120;
+			inputLineSig = wifiNetworkExport.getSignal();
+			diff = 100;
+
 			for (WifiNetworkExport comboWifiNetworkExport : combo) {
-				String mac2 = comboWifiNetworkExport.getMAC();
+				String mac2 = comboWifiNetworkExport.getMAC();	
 				if (mac1.equals(mac2)) {
 					comboLineSig = comboWifiNetworkExport.getSignal();
+					diff = inputLineSig - comboLineSig;
 					continue;
 				}
 			}
-			inputLineSig = wifiNetworkExport.getSignal();
-			diff = inputLineSig - comboLineSig;
 			double pow1 = Math.pow(diff, sigDiff);
 			double pow2 = Math.pow(inputLineSig, 2);
 			weight = weight * (norm/(pow1*pow2));

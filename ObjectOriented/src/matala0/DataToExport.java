@@ -282,8 +282,6 @@ public class DataToExport {
 			br = new BufferedReader(new FileReader(file));
 			String line;
 			br.readLine();
-			br.readLine();
-			br.readLine();
 
 			while ((line = br.readLine()) != null) {
 		//		System.out.println("Line: " + i++ + ") " + line);
