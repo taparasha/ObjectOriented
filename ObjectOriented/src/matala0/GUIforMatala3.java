@@ -432,7 +432,12 @@ public class GUIforMatala3 {
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Export", null, panel_1, null);
 		panel_1.setLayout(null);
-
+		
+		
+/**
+ * connecting the code to the button of creat csv
+ */
+		
 		JButton btnMakeCsvFile = new JButton("Create CSV File");
 		btnMakeCsvFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

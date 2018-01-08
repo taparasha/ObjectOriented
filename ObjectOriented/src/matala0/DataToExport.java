@@ -29,7 +29,7 @@ public class DataToExport {
 	public static String KML_FILE_NAME = "\\exportData.kml";
 	public static final String SEPERATOR = ",";
 
-
+    
 	private long id;
 	private Date time;
 	private double lat;
