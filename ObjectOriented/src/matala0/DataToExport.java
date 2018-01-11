@@ -284,7 +284,7 @@ public class DataToExport {
 			br.readLine();
 
 			while ((line = br.readLine()) != null) {
-		//		System.out.println("Line: " + i++ + ") " + line);
+			System.out.println("Line: " + i++ + ") " + line);
 
 				DataToExport dataToExport = new DataToExport();
 				String[] entries = line.split(",");

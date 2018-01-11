@@ -6,10 +6,16 @@ import java.nio.file.FileSystems;
 
 import javax.swing.JOptionPane;
 
+
+
 public class myThread extends Thread {
+	/**
+	 * creating a thread for the watchfile function in order to check all the time if there are changes in the data folders. 
+	 */
 	myThread(String name){
 		super (name);
 	}
+	
 	
 	@Override
 	public void run(){
@@ -29,6 +35,13 @@ public class myThread extends Thread {
 		}
 	}
 	
+	/**
+	 * function that checks if there were adding or deleting files from the wigle wifi folder and from the comb folder
+	 * 
+	 * @param path
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public static void Watch(String path) throws IOException,
 	InterruptedException {
 		
