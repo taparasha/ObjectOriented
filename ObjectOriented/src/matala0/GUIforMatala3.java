@@ -132,8 +132,9 @@ public class GUIforMatala3 {
 			public void actionPerformed(ActionEvent e) {
 				filePath = txtEnterFolderPath.getText();
 				lblMessage.setText(filePath);
-
-
+				myThread t = new myThread("wigle");
+				t.start();
+				
 
 
 				csvFiles = WifiNetworkImport.getFilesListForNetworkImport(filePath);
@@ -179,7 +180,10 @@ public class GUIforMatala3 {
 			public void actionPerformed(ActionEvent e) {
 				filePath = txtEnterCsvPath.getText();
 				lblMessage.setText(filePath);
-
+				myThread t = new myThread("csv");
+				t.start();
+				
+				
 				List<DataToExport> NewListToAdd = new ArrayList<>();
 
 				List<File> csvFiles3 = DataToExport.getFilesListForDataToExport(filePath);
