@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import java.awt.Panel;
 import java.awt.SystemColor;
+import javax.swing.JTextPane;
 
 public class GUIforMatala3 {
 
@@ -435,7 +436,7 @@ public class GUIforMatala3 {
 		
 		
 /**
- * connecting the code to the button of creat csv
+ * connecting the code to the button of create csv
  */
 		
 		JButton btnMakeCsvFile = new JButton("Create CSV File");
@@ -572,6 +573,10 @@ public class GUIforMatala3 {
 		JPanel panel_7 = new JPanel();
 		tabbedPane.addTab("Algo 2", null, panel_7, null);
 		panel_7.setLayout(null);
+		
+		JTextPane textPane = new JTextPane();
+		textPane.setBounds(31, 38, 189, 20);
+		panel_7.add(textPane);
 		//
 
 
