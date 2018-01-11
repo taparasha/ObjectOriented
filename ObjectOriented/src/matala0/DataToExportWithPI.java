@@ -84,9 +84,6 @@ public class DataToExportWithPI {
 		}
 		similPI = sortByPI(similPI);
 		
-	   for (DataToExportWithPI dataToExportWithPI : similPI) {
-		System.out.println(dataToExportWithPI.getPI());
-	   }
 		
 		
 		return algo1withpi(similPI);

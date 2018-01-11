@@ -52,9 +52,9 @@ public class GUIforMatala3 {
 	private Label label;
 	private Label label_10;
 	private Label label_12;
-	private Label label_14;
-	private Label label_17;
-	private Label label_19;
+	private Label labelLa;
+	private Label labelLo;
+	private Label labelAl;
 	
 	private double alt1;
 	private double lat1;
@@ -72,10 +72,10 @@ public class GUIforMatala3 {
 	private JTextField txtEnterMac;
 	private JTextField txtEnterMac_1;
 	private JTextField txtEnterSignal;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTextField textField_8;
+	private JTextField txtEnterMac_2;
+	private JTextField txtEnterSignal_1;
+	private JTextField txtEnterMac_3;
+	private JTextField txtEnterSignal_2;
 
 	/**
 	 * Launch the application.
@@ -595,7 +595,7 @@ public class GUIforMatala3 {
 		panel_7.add(txtEnterDatatoexport);
 		
 		JLabel lblEnterDatatoexportYou = new JLabel("Enter Line of Combo File you want to Locate:");
-		lblEnterDatatoexportYou.setBounds(30, 29, 229, 24);
+		lblEnterDatatoexportYou.setBounds(30, 29, 266, 24);
 		panel_7.add(lblEnterDatatoexportYou);
 		
 		JButton button_2 = new JButton("Apply");
@@ -610,7 +610,7 @@ public class GUIforMatala3 {
 				line.setLon(Double.parseDouble(entries[3]));
 				line.setAlt(Double.parseDouble(entries[4]));
 				
-				line.setTime(WifiNetworkImport.getDateFromString(entries[3]));
+
 				for(int q=6; q<=entries.length - 3; q+=4){
 					WifiNetworkExport temp = new WifiNetworkExport();
 					temp.setMAC(entries[q+1]);
@@ -619,45 +619,47 @@ public class GUIforMatala3 {
 					line.getWifiNetworks().add(temp);
 				}
 				
-				
-				
 				DataToExport t = new DataToExport();
 				t = DataToExportWithPI.checkSimilarity(line, file);
 				
-				label_14.setText(Double.toString(t.getLat()));
-				label_17.setText(Double.toString(t.getLon()));
-				label_19.setText(Double.toString(t.getAlt()));
+				String Lat = Double.toString(t.getLat());
+				String Lon = Double.toString(t.getLon());
+				String Alt = Double.toString(t.getAlt());
+				System.out.println("lat:"+Lat+", lon:"+Lon+", alt:"+Alt);
+				labelLa.setText(Lat);
+				labelLo.setText(Lon);
+				labelAl.setText(Alt);
 			}
 		});
 		button_2.setBounds(467, 83, 99, 23);
 		panel_7.add(button_2);
 		
-		Label label_14 = new Label("");
-		label_14.setBackground(SystemColor.controlHighlight);
-		label_14.setBounds(97, 291, 101, 23);
-		panel_7.add(label_14);
+		Label labelLa = new Label("");
+		labelLa.setBackground(SystemColor.controlHighlight);
+		labelLa.setBounds(59, 291, 139, 23);
+		panel_7.add(labelLa);
 		
 		Label label_15 = new Label("Lat");
-		label_15.setBounds(69, 291, 43, 32);
+		label_15.setBounds(30, 291, 43, 32);
 		panel_7.add(label_15);
 		
 		Label label_16 = new Label("Lon");
-		label_16.setBounds(220, 282, 43, 32);
+		label_16.setBounds(204, 282, 43, 32);
 		panel_7.add(label_16);
 		
-		Label label_17 = new Label("");
-		label_17.setBackground(SystemColor.controlHighlight);
-		label_17.setBounds(246, 291, 101, 23);
-		panel_7.add(label_17);
+		Label labelLo = new Label("");
+		labelLo.setBackground(SystemColor.controlHighlight);
+		labelLo.setBounds(235, 291, 137, 23);
+		panel_7.add(labelLo);
 		
 		Label label_18 = new Label("Alt");
 		label_18.setBounds(378, 282, 43, 32);
 		panel_7.add(label_18);
 		
-		Label label_19 = new Label("");
-		label_19.setBackground(SystemColor.controlHighlight);
-		label_19.setBounds(404, 286, 101, 23);
-		panel_7.add(label_19);
+		Label labelAl = new Label("");
+		labelAl.setBackground(SystemColor.controlHighlight);
+		labelAl.setBounds(404, 286, 115, 23);
+		panel_7.add(labelAl);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(0, 258, 590, 2);
@@ -670,7 +672,7 @@ public class GUIforMatala3 {
 		txtEnterMac_1 = new JTextField();
 		txtEnterMac_1.setText("Enter MAC 1");
 		txtEnterMac_1.setColumns(10);
-		txtEnterMac_1.setBounds(101, 118, 184, 22);
+		txtEnterMac_1.setBounds(112, 118, 184, 22);
 		panel_7.add(txtEnterMac_1);
 		
 		txtEnterSignal = new JTextField();
@@ -679,39 +681,81 @@ public class GUIforMatala3 {
 		txtEnterSignal.setBounds(312, 119, 184, 22);
 		panel_7.add(txtEnterSignal);
 		
-		JLabel label_20 = new JLabel("MacAdrees 1");
-		label_20.setBounds(30, 152, 129, 24);
-		panel_7.add(label_20);
+		JLabel lblMacadrees_1 = new JLabel("MacAdrees 2");
+		lblMacadrees_1.setBounds(30, 152, 129, 24);
+		panel_7.add(lblMacadrees_1);
 		
-		textField_5 = new JTextField();
-		textField_5.setText("Enter MAC 1");
-		textField_5.setColumns(10);
-		textField_5.setBounds(101, 153, 184, 22);
-		panel_7.add(textField_5);
+		txtEnterMac_2 = new JTextField();
+		txtEnterMac_2.setText("Enter MAC 2");
+		txtEnterMac_2.setColumns(10);
+		txtEnterMac_2.setBounds(112, 153, 184, 22);
+		panel_7.add(txtEnterMac_2);
 		
-		textField_6 = new JTextField();
-		textField_6.setText("Enter Signal 1");
-		textField_6.setColumns(10);
-		textField_6.setBounds(312, 154, 184, 22);
-		panel_7.add(textField_6);
+		txtEnterSignal_1 = new JTextField();
+		txtEnterSignal_1.setText("Enter Signal 2");
+		txtEnterSignal_1.setColumns(10);
+		txtEnterSignal_1.setBounds(312, 154, 184, 22);
+		panel_7.add(txtEnterSignal_1);
 		
-		JLabel label_21 = new JLabel("MacAdrees 1");
-		label_21.setBounds(30, 187, 129, 24);
-		panel_7.add(label_21);
+		JLabel lblMacadrees_2 = new JLabel("MacAdrees 3");
+		lblMacadrees_2.setBounds(30, 187, 129, 24);
+		panel_7.add(lblMacadrees_2);
 		
-		textField_7 = new JTextField();
-		textField_7.setText("Enter MAC 1");
-		textField_7.setColumns(10);
-		textField_7.setBounds(101, 188, 184, 22);
-		panel_7.add(textField_7);
+		txtEnterMac_3 = new JTextField();
+		txtEnterMac_3.setText("Enter MAC 3");
+		txtEnterMac_3.setColumns(10);
+		txtEnterMac_3.setBounds(112, 188, 184, 22);
+		panel_7.add(txtEnterMac_3);
 		
-		textField_8 = new JTextField();
-		textField_8.setText("Enter Signal 1");
-		textField_8.setColumns(10);
-		textField_8.setBounds(312, 189, 184, 22);
-		panel_7.add(textField_8);
+		txtEnterSignal_2 = new JTextField();
+		txtEnterSignal_2.setText("Enter Signal 3");
+		txtEnterSignal_2.setColumns(10);
+		txtEnterSignal_2.setBounds(312, 189, 184, 22);
+		panel_7.add(txtEnterSignal_2);
 		
 		JButton button_3 = new JButton("Apply");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String MAC1,MAC2,MAC3;
+				int signal1,signal2,signal3;
+				MAC1 = txtEnterMac_1.getText();
+				MAC2 = txtEnterMac_2.getText();
+				MAC3 = txtEnterMac_3.getText();
+				
+				signal1 = Integer.parseInt(txtEnterSignal.getText());
+				signal2 = Integer.parseInt(txtEnterSignal_1.getText());
+				signal3 = Integer.parseInt(txtEnterSignal_2.getText());
+				
+				DataToExport location = new DataToExport();
+				WifiNetworkExport a = new WifiNetworkExport();
+				a.setMAC(MAC1);
+				a.setSignal(signal1);
+				
+				WifiNetworkExport b = new WifiNetworkExport();
+				b.setMAC(MAC2);
+				b.setSignal(signal2);
+				
+				WifiNetworkExport c = new WifiNetworkExport();
+				c.setMAC(MAC3);
+				c.setSignal(signal3);
+				
+				List<WifiNetworkExport> list = new ArrayList<>();
+				list.add(a);list.add(b);list.add(c);
+				
+				location.setWifiNetworks(list);
+				
+				DataToExport t = new DataToExport();
+				t = DataToExportWithPI.checkSimilarity(location, file);
+				
+				String Lat = Double.toString(t.getLat());
+				String Lon = Double.toString(t.getLon());
+				String Alt = Double.toString(t.getAlt());
+				System.out.println("lat:"+Lat+", lon:"+Lon+", alt:"+Alt);
+				labelLa.setText("    "+Lat);
+				labelLo.setText("    "+Lon);
+				labelAl.setText("    "+Alt);
+			}
+		});
 		button_3.setBounds(467, 222, 99, 23);
 		panel_7.add(button_3);
 		//
