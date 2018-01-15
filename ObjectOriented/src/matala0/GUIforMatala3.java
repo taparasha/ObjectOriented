@@ -598,6 +598,32 @@ public class GUIforMatala3 {
 		lblEnterDatatoexportYou.setBounds(30, 29, 266, 24);
 		panel_7.add(lblEnterDatatoexportYou);
 		
+		Label labelLa = new Label("");
+		labelLa.setBackground(SystemColor.controlHighlight);
+		labelLa.setBounds(59, 291, 139, 23);
+		panel_7.add(labelLa);
+		
+		Label label_15 = new Label("Lat");
+		label_15.setBounds(30, 291, 43, 32);
+		panel_7.add(label_15);
+		
+		Label label_16 = new Label("Lon");
+		label_16.setBounds(204, 282, 43, 32);
+		panel_7.add(label_16);
+		
+		Label labelLo = new Label("");
+		labelLo.setBackground(SystemColor.controlHighlight);
+		labelLo.setBounds(235, 291, 137, 23);
+		panel_7.add(labelLo);
+		
+		Label label_18 = new Label("Alt");
+		label_18.setBounds(378, 282, 43, 32);
+		panel_7.add(label_18);
+		
+		Label labelAl = new Label("");
+		labelAl.setBackground(SystemColor.controlHighlight);
+		labelAl.setBounds(404, 286, 115, 23);
+		panel_7.add(labelAl);
 		JButton button_2 = new JButton("Apply");
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -629,37 +655,13 @@ public class GUIforMatala3 {
 				labelLa.setText(Lat);
 				labelLo.setText(Lon);
 				labelAl.setText(Alt);
+
 			}
 		});
 		button_2.setBounds(467, 83, 99, 23);
 		panel_7.add(button_2);
 		
-		Label labelLa = new Label("");
-		labelLa.setBackground(SystemColor.controlHighlight);
-		labelLa.setBounds(59, 291, 139, 23);
-		panel_7.add(labelLa);
 		
-		Label label_15 = new Label("Lat");
-		label_15.setBounds(30, 291, 43, 32);
-		panel_7.add(label_15);
-		
-		Label label_16 = new Label("Lon");
-		label_16.setBounds(204, 282, 43, 32);
-		panel_7.add(label_16);
-		
-		Label labelLo = new Label("");
-		labelLo.setBackground(SystemColor.controlHighlight);
-		labelLo.setBounds(235, 291, 137, 23);
-		panel_7.add(labelLo);
-		
-		Label label_18 = new Label("Alt");
-		label_18.setBounds(378, 282, 43, 32);
-		panel_7.add(label_18);
-		
-		Label labelAl = new Label("");
-		labelAl.setBackground(SystemColor.controlHighlight);
-		labelAl.setBounds(404, 286, 115, 23);
-		panel_7.add(labelAl);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(0, 258, 590, 2);

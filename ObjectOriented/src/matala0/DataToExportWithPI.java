@@ -133,6 +133,7 @@ public class DataToExportWithPI {
 		double sumLat=0, sumLon=0, sumAlt=0, g=0, t=0, e=0;
 		double sumWeight=0;
 		
+		if (similPI.isEmpty()) return finala;
 		for (int i = 0; i < 3; i++) {
 			DataToExportWithPI dataToExportWithPI = similPI.get(i);
 			double weigth = dataToExportWithPI.getPI();

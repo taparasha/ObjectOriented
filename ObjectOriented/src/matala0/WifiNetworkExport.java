@@ -54,7 +54,6 @@ public class WifiNetworkExport {
 		wifiNetworkExport.setMAC(wifiNetworkImport.getMAC());
 		wifiNetworkExport.setFreuncy(wifiNetworkImport.getAccuracyMeters());
 		return wifiNetworkExport;
-		System.out.println("d");
 	}
 	
 	/**
