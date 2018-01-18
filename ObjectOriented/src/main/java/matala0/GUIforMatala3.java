@@ -1,34 +1,26 @@
-package matala0;
+package main.java.matala0;
 
+import java.awt.Color;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JTextField;
+import java.awt.Label;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
-import javax.swing.JSeparator;
-import java.awt.Canvas;
-import java.awt.Label;
-import javax.swing.UIManager;
-import javax.swing.JComboBox;
+
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import java.awt.Panel;
-import java.awt.SystemColor;
-import javax.swing.JTextPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 public class GUIforMatala3 {
 
@@ -76,6 +68,10 @@ public class GUIforMatala3 {
 	private JTextField txtEnterSignal_1;
 	private JTextField txtEnterMac_3;
 	private JTextField txtEnterSignal_2;
+	private JTextField txtEnterIp;
+	private JTextField txtEnterUrl;
+	private JTextField txtEnterUser;
+	private JTextField txtEnterPassword;
 
 	/**
 	 * Launch the application.
@@ -103,6 +99,7 @@ public class GUIforMatala3 {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 
 		frame = new JFrame();
@@ -212,6 +209,58 @@ public class GUIforMatala3 {
 		});
 		btnAddCsv.setBounds(317, 99, 154, 23);
 		panel.add(btnAddCsv);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(0, 147, 590, 2);
+		panel.add(separator_2);
+		
+		txtEnterIp = new JTextField();
+		txtEnterIp.setText("Enter IP");
+		txtEnterIp.setColumns(10);
+		txtEnterIp.setBounds(99, 206, 135, 20);
+		panel.add(txtEnterIp);
+		
+		JButton btnUploadDataBase = new JButton("Upload Data Base");
+		btnUploadDataBase.setBounds(413, 283, 154, 23);
+		panel.add(btnUploadDataBase);
+		
+		JLabel lblUploadDataBase = new JLabel("Upload Data Base");
+		lblUploadDataBase.setBounds(39, 171, 115, 28);
+		panel.add(lblUploadDataBase);
+		
+		JLabel lblEnterIp = new JLabel("Enter IP");
+		lblEnterIp.setBounds(42, 202, 47, 28);
+		panel.add(lblEnterIp);
+		
+		txtEnterUrl = new JTextField();
+		txtEnterUrl.setText("Enter URL");
+		txtEnterUrl.setColumns(10);
+		txtEnterUrl.setBounds(99, 241, 135, 20);
+		panel.add(txtEnterUrl);
+		
+		JLabel lblEnterUrl = new JLabel("Enter URL");
+		lblEnterUrl.setBounds(41, 237, 58, 28);
+		panel.add(lblEnterUrl);
+		
+		txtEnterUser = new JTextField();
+		txtEnterUser.setText("Enter USER");
+		txtEnterUser.setColumns(10);
+		txtEnterUser.setBounds(391, 206, 135, 20);
+		panel.add(txtEnterUser);
+		
+		JLabel lblEnterUser = new JLabel("Enter USER");
+		lblEnterUser.setBounds(300, 202, 58, 28);
+		panel.add(lblEnterUser);
+		
+		txtEnterPassword = new JTextField();
+		txtEnterPassword.setText("Enter Password");
+		txtEnterPassword.setColumns(10);
+		txtEnterPassword.setBounds(391, 241, 135, 20);
+		panel.add(txtEnterPassword);
+		
+		JLabel lblEnterPassword = new JLabel("Enter PASSWORD");
+		lblEnterPassword.setBounds(286, 237, 95, 28);
+		panel.add(lblEnterPassword);
 
 		JPanel panel_2 = new JPanel();
 		tabbedPane.addTab("Filters", null, panel_2, null);

@@ -1,4 +1,4 @@
-package matala0;
+package main.java.matala0;
 
 import java.util.Collections;
 import java.util.Comparator;

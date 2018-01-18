@@ -1,4 +1,4 @@
-package matala0;
+package main.java.matala0;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
